@@ -1,16 +1,28 @@
 class Snake {
 
-  static join(arena) {
-    return new Snake(arena);
+  static create() {
+    return new Snake();
   }
-
+  
   constructor(arena) {
-    this.arena = arena;
     this.food = 0;
 
+    this.direction = 'right';
+  }
+
+  joinArena(arena) {
+    this.arena = arena;
+    arena.registerSnake(this)
+    this.startMoving();
+
+    return this;
+  }
+
+
+  startMoving() {
     this.moveInterval = setInterval(() => {
       this.move(this.direction);
-    }, 200)
+    }, 150)
   }
 
   tail(fields) {
@@ -39,9 +51,14 @@ class Snake {
     return this;
   }
 
-  turn(direction) {
-    this.direction = direction;
+  turn(newDirection) {
+    const { lastDirection } = this;
+
+    if (directionIsIn90degsToDirection(newDirection, lastDirection)) {
+      this.direction = newDirection;
+    }
   }
+
 
   move(direction) {
 
@@ -75,6 +92,8 @@ class Snake {
 
     this.fields = newFields;
     this.renderOnArena();
+
+    this.lastDirection = direction;
   }
 
   renderOnArena() {
@@ -103,10 +122,22 @@ class Snake {
   }
 
 
+
   static readDirection(arrowKey) {
     return arrowKey
       .replace('Arrow', '')
       .toLowerCase();
+  }
+}
+
+function directionIsIn90degsToDirection(dir1, dir2) {
+  switch(dir1) {
+    case 'up':
+    case 'down':
+      return dir2 === 'left' || dir2 === 'right';
+    case 'left':
+    case 'right':
+      return dir2 === 'up' || dir2 === 'down';
   }
 }
 

@@ -12,10 +12,17 @@ class Arena {
   constructor(root, canvas) {
     this.root = root;
     this.canvas = canvas;
-    this.obstacles = [];
-    this.food = [];
+    this.ctx = this.canvas.getContext("2d");
+
     this.fieldSize = 20;
+
+    this.children = {
+      obstacles: [],
+      food: [],
+      snakes: [],
+    };
   }
+
 
   setFieldSize(size) {
     this.fieldSize = size;
@@ -23,46 +30,49 @@ class Arena {
 
   size(width, height = width) {
 
+    const { fieldSize } = this;
+
     this.width = width;
     this.height = height; 
 
-    this.canvas.width = this.fieldToPx(width);
-    this.canvas.height = this.fieldToPx(height);
+    this.canvas.width = width * fieldSize;
+    this.canvas.height = height * fieldSize;
 
     return this;
   }
 
-  obstacless(obst = []) {
-    this.obstacles = obst;
+  obstacles(obstacles = []) {
+    this.children.obstacles = obstacles;
 
     return this;
   }
 
-  foodd(food = []) {
-    this.food = food;
+  food(food = []) {
+    this.children.food = food;
 
     return this;
   }
 
-  drawInterval(interval) {
-    this.interval = setInterval(() => this.draw, interval);
+  registerSnake(snake) {
+    this.children.snakes = [snake];
   }
-
-  stopDrawInterval() {
-    clearInterval(this.interval);
-  }
-
 
   moveSnake(snake) {
     this.draw();
     this.drawManyPoints(snake.fields);
 
+    const whatsOnField = this.checkField(snake.head);
 
-    if (this.checkFieldForFood(snake.head)) {
-      snake.obtainFood();
-      this.removeFood(snake.head);
+    switch(whatsOnField) {
+      case 'food':
+        snake.obtainFood();
+        this.removeFood(snake.head);
+        break;
+      case 'obstacle':
+        snake.die();
+        this.snakes = [];
+      default:
     }
-
 
     return this;
   }
@@ -74,7 +84,7 @@ class Arena {
   }
 
   removeFood(point) {
-    this.food = this.food.filter((foodPoint) => {
+    this.children.food = this.children.food.filter((foodPoint) => {
       return !Arena.comparePoints(foodPoint, point);
     });
   }
@@ -82,8 +92,9 @@ class Arena {
 
   draw() {
     this.clearCanvas();
-    this.drawManyPoints(this.obstacles);
-    this.drawManyPoints(this.food, 'pink');
+
+    this.drawManyPoints(this.children.obstacles);
+    this.drawManyPoints(this.children.food, 'pink');
 
     return this;
   }
@@ -95,7 +106,7 @@ class Arena {
   }
 
   drawPoint({ x, y }, color) {
-    const ctx = this.canvas.getContext("2d");
+    const { ctx } = this;
 
     if (color) {
       ctx.fillStyle = color;
@@ -112,12 +123,25 @@ class Arena {
     ctx.fillStyle = 'black';
   }
 
+  checkField(field) {
+    const checkIfIsOnField  = (comparedPoint) => Arena.comparePoints(comparedPoint, field);
+
+    if (this.children.food.some(checkIfIsOnField)) {
+      return 'food';
+    }
+
+    if (this.children.obstacles.some(checkIfIsOnField)) {
+      return 'obstacle';
+    }
+
+    return null;
+  }
+
   checkFieldForFood(point) {
-    return this.food.some((foodPoint) => Arena.comparePoints(foodPoint, point));
   }
 
   clearCanvas() {
-    const ctx = this.canvas.getContext("2d");
+    const { ctx } = this;
     ctx.clearRect(
       0, 0, this.canvas.width, this.canvas.height
     );
@@ -131,8 +155,39 @@ class Arena {
     return (point1.x === point2.x) && (point1.y === point2.y);
   }
 
+  useMap(map) {
 
+    const width = map.length;
+    const height = map[0].length;
 
+    this
+      .size(width, height)
+      .obstacles(
+        pullFields(map, 'x')
+      )
+      .food(
+        pullFields(map, 'o')
+      )
+
+    return this;
+  }
+}
+
+function pullFields(array3d, searchedSign) {
+
+  return array3d.reduce((total, row, y) => {
+
+    const totalFromRow = row.split('').reduce((total2, sign, x) => {
+      if (sign === searchedSign) {
+        total2.push({ x, y });
+      }
+      return total2;
+    }, []);
+
+    total.push(totalFromRow);
+    return total;
+
+  }, []).flat()
 }
 
 export default Arena;
