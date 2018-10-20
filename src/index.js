@@ -2,14 +2,14 @@ import Arena from './Arena';
 import Snake from './Snake';
 import { map } from './maps';
 
-const arena = Arena.from('#app')
+const arena = new Arena()
   .useMap(map)
-  .draw();
+  .mount('#app')
 
 window.arena = arena;
 
 
-const goSnake = () => Snake.create()
+const goSnake = () => new Snake()
   .joinArena(arena)
   .tail([
     {x: 10, y: 8},

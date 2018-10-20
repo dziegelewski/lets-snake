@@ -1,10 +1,7 @@
 class Snake {
 
-  static create() {
-    return new Snake();
-  }
-  
-  constructor(arena) {
+  constructor() {
+    this.id = idForSnake();
     this.food = 0;
 
     this.direction = 'right';
@@ -100,17 +97,12 @@ class Snake {
     this.arena.moveSnake(this)
   }
 
-  removeFromArena() {
-    this.arena.removeSnake();
-  }
-
   obtainFood() {
     this.food++;
   }
 
   die() {
     clearInterval(this.moveInterval);
-    this.removeFromArena();
   }
 
   get head() {
@@ -140,5 +132,10 @@ function directionIsIn90degsToDirection(dir1, dir2) {
       return dir2 === 'up' || dir2 === 'down';
   }
 }
+
+const idForSnake = (() => {
+  let id = 1;
+  return () => id++;
+})()
 
 export default Snake;

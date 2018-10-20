@@ -1,66 +1,54 @@
+import Canvas from './Canvas';
+
 class Arena {
 
-  static from(domSelector) {
-    const root = document.querySelector(domSelector);
-    const canvas = document.createElement('canvas');
-    canvas.style.border = '2px solid black';
-    root.appendChild(canvas);
+  constructor(canvas) {
+    this.width = 0;
+    this.height = 0;
 
-    return new Arena(root, canvas);
+    this.obstacles = [];
+    this.food = [];
+    this.snakes = {};
   }
 
-  constructor(root, canvas) {
-    this.root = root;
-    this.canvas = canvas;
-    this.ctx = this.canvas.getContext("2d");
-
-    this.fieldSize = 20;
-
-    this.children = {
-      obstacles: [],
-      food: [],
-      snakes: [],
-    };
+  mount(domSelector) {
+    this.root = document.querySelector(domSelector);
+    this.canvas = new Canvas(this.width, this.height);
+    this.root.appendChild(this.canvas.cnv);
+    this.redraw();
+    return this;
   }
 
-
-  setFieldSize(size) {
-    this.fieldSize = size;
-  } 
-
-  size(width, height = width) {
-
-    const { fieldSize } = this;
-
+  setSize(width, height = width) {
     this.width = width;
     this.height = height; 
-
-    this.canvas.width = width * fieldSize;
-    this.canvas.height = height * fieldSize;
-
-    return this;
+    this.canvas && this.canvas.setSize(width, height);
   }
 
-  obstacles(obstacles = []) {
-    this.children.obstacles = obstacles;
-
-    return this;
+  redraw() {
+    this.canvas && this.canvas.draw(
+      this.obstacles,
+      this.food,
+      this.snakesFields,
+    );
   }
 
-  food(food = []) {
-    this.children.food = food;
-
-    return this;
+  extractFields() {
+    return {
+      width: this.width,
+      height: this.height,
+      obstacles: this.obstacles,
+      food: this.food,
+      snakesFields: this.snakesFields,
+    }
   }
 
   registerSnake(snake) {
-    this.children.snakes = [snake];
+    this.snakes[snake.id] = snake;
+    this.redraw();
   }
 
   moveSnake(snake) {
-    this.draw();
-    this.drawManyPoints(snake.fields);
-
     const whatsOnField = this.checkField(snake.head);
 
     switch(whatsOnField) {
@@ -70,86 +58,44 @@ class Arena {
         break;
       case 'obstacle':
         snake.die();
-        this.snakes = [];
+        delete this.snakes[snake.id];
       default:
     }
 
-    return this;
-  }
-
-  removeSnake() {
-    this.draw();
-
+    this.redraw();
     return this;
   }
 
   removeFood(point) {
-    this.children.food = this.children.food.filter((foodPoint) => {
+    this.food = this.food.filter((foodPoint) => {
       return !Arena.comparePoints(foodPoint, point);
     });
   }
 
-
-  draw() {
-    this.clearCanvas();
-
-    this.drawManyPoints(this.children.obstacles);
-    this.drawManyPoints(this.children.food, 'pink');
-
-    return this;
+  eachSnake() {
+    return Object.values(this.snakes);
   }
 
-  drawManyPoints(points, color) {
-    points.forEach((point) => {
-      this.drawPoint(point, color);
-    })
-  }
-
-  drawPoint({ x, y }, color) {
-    const { ctx } = this;
-
-    if (color) {
-      ctx.fillStyle = color;
-    }
-
-    const { fieldSize } = this;
-    ctx.fillRect(
-      x * fieldSize,
-      y * fieldSize,
-      fieldSize,
-      fieldSize
-    );
-
-    ctx.fillStyle = 'black';
+  get snakesFields() {
+    return this.eachSnake().map((snake) => {
+      return snake.fields || []
+    }).flat()
   }
 
   checkField(field) {
     const checkIfIsOnField  = (comparedPoint) => Arena.comparePoints(comparedPoint, field);
 
-    if (this.children.food.some(checkIfIsOnField)) {
+    if (this.food.some(checkIfIsOnField)) {
       return 'food';
     }
 
-    if (this.children.obstacles.some(checkIfIsOnField)) {
+    if (this.obstacles.some(checkIfIsOnField)) {
       return 'obstacle';
     }
 
     return null;
   }
 
-  checkFieldForFood(point) {
-  }
-
-  clearCanvas() {
-    const { ctx } = this;
-    ctx.clearRect(
-      0, 0, this.canvas.width, this.canvas.height
-    );
-  }
-
-  fieldToPx(value) {
-    return value * this.fieldSize;
-  }
 
   static comparePoints(point1, point2) {
     return (point1.x === point2.x) && (point1.y === point2.y);
@@ -160,14 +106,28 @@ class Arena {
     const width = map.length;
     const height = map[0].length;
 
+    this.setSize(width, height);
+    
     this
-      .size(width, height)
-      .obstacles(
+      .placeObstacles(
         pullFields(map, 'x')
       )
-      .food(
+      .placeFood(
         pullFields(map, 'o')
-      )
+      );
+
+    return this;
+  }
+
+
+  placeObstacles(obstacles = []) {
+    this.obstacles = obstacles;
+
+    return this;
+  }
+
+  placeFood(food = []) {
+    this.food = food;
 
     return this;
   }
@@ -189,5 +149,6 @@ function pullFields(array3d, searchedSign) {
 
   }, []).flat()
 }
+
 
 export default Arena;
