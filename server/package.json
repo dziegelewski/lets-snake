@@ -1,0 +1,17 @@
+{
+  "name": "letssnake-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.3.3",
+    "ws": "^6.1.0"
+  }
+}

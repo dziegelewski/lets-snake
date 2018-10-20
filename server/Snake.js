@@ -30,24 +30,6 @@ class Snake {
     return this;
   }
 
-
-  listenToKeyboard() {
-    document.addEventListener('keydown', (e) => {
-      switch(e.key) {
-        case "ArrowUp":
-        case "ArrowDown":
-        case "ArrowLeft":
-        case "ArrowRight":
-
-        this.turn(
-          Snake.readDirection(e.key)
-        );
-      }
-    })
-
-    return this;
-  }
-
   turn(newDirection) {
     const { lastDirection } = this;
 
@@ -55,7 +37,6 @@ class Snake {
       this.direction = newDirection;
     }
   }
-
 
   move(direction) {
 
@@ -138,4 +119,4 @@ const idForSnake = (() => {
   return () => id++;
 })()
 
-export default Snake;
+module.exports = Snake;

@@ -1,8 +1,11 @@
-import Canvas from './Canvas';
+const { EventEmitter } = require('events');
+const Rx = require('rxjs/Rx');
 
-class Arena {
+class Arena extends EventEmitter {
 
-  constructor(canvas) {
+  constructor() {
+    super();
+
     this.width = 0;
     this.height = 0;
 
@@ -11,29 +14,20 @@ class Arena {
     this.snakes = {};
   }
 
-  mount(domSelector) {
-    this.root = document.querySelector(domSelector);
-    this.canvas = new Canvas(this.width, this.height);
-    this.root.appendChild(this.canvas.cnv);
-    this.redraw();
-    return this;
+  toStream() {
+    return Rx.Observable.fromEvent(this, 'redraw');
   }
 
   setSize(width, height = width) {
     this.width = width;
     this.height = height; 
-    this.canvas && this.canvas.setSize(width, height);
   }
 
   redraw() {
-    this.canvas && this.canvas.draw(
-      this.obstacles,
-      this.food,
-      this.snakesFields,
-    );
+    this.emit('redraw', this.extractedFields());
   }
 
-  extractFields() {
+  extractedFields() {
     return {
       width: this.width,
       height: this.height,
@@ -151,4 +145,4 @@ function pullFields(array3d, searchedSign) {
 }
 
 
-export default Arena;
+module.exports = Arena;

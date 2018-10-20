@@ -1,4 +1,4 @@
-export const map = [
+const map = [
 '                              ',
 '       xxxxxxxxx              ',
 '                              ',
@@ -30,3 +30,7 @@ export const map = [
 '                              ',
 '          xxxxxxxx            ',
 ];
+
+module.exports = {
+  map
+};
