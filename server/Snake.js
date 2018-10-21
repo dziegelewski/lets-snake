@@ -1,7 +1,9 @@
+let snakeIds = 0;
+
 class Snake {
 
   constructor() {
-    this.id = idForSnake();
+    this.id = ++snakeIds;
     this.food = 0;
 
     this.direction = 'right';
@@ -18,7 +20,7 @@ class Snake {
 
   startMoving() {
     this.moveInterval = setInterval(() => {
-      this.move(this.direction);
+      this.move();
     }, 150)
   }
 
@@ -33,17 +35,18 @@ class Snake {
   turn(newDirection) {
     const { lastDirection } = this;
 
-    if (directionIsIn90degsToDirection(newDirection, lastDirection)) {
+    if (Snake.directionIsIn90degsToDirection(newDirection, lastDirection)) {
       this.direction = newDirection;
     }
   }
 
-  move(direction) {
+  move() {
+    const { direction } = this;
 
     if (!direction) return;
 
     const newFields = [...this.fields];
-    const newHeadPosition = {...this.fields[0]}
+    const newHeadPosition = {...this.fields[0]};
 
     switch(direction) {
       case "up":
@@ -94,29 +97,22 @@ class Snake {
     }
   }
 
-
-
   static readDirection(arrowKey) {
     return arrowKey
       .replace('Arrow', '')
       .toLowerCase();
   }
-}
 
-function directionIsIn90degsToDirection(dir1, dir2) {
-  switch(dir1) {
-    case 'up':
-    case 'down':
-      return dir2 === 'left' || dir2 === 'right';
-    case 'left':
-    case 'right':
-      return dir2 === 'up' || dir2 === 'down';
+  static directionIsIn90degsToDirection(dir1, dir2) {
+    switch(dir1) {
+      case 'up':
+      case 'down':
+        return dir2 === 'left' || dir2 === 'right';
+      case 'left':
+      case 'right':
+        return dir2 === 'up' || dir2 === 'down';
+    }
   }
 }
-
-const idForSnake = (() => {
-  let id = 1;
-  return () => id++;
-})()
 
 module.exports = Snake;

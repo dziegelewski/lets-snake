@@ -1,15 +1,21 @@
 require('./array-prorotype-flat');
+
 const WebSocket = require('ws');
 
 const Arena = require('./Arena');
 const Snake = require('./Snake');
 const { map } = require('./maps');
 
-const arena = new Arena().useMap(map)
-const socket = new WebSocket.Server({ port: 9000 });
+const PORT = process.env.PORT || 9000; 
 
-socket.on('connection', (innerSocket) => {
+const arena = new Arena().useMap(map);
 
+const socketServer = new WebSocket.Server(
+  { port: PORT },
+  () => console.log(`Listening to port ${PORT}`),
+);
+
+socketServer.on('connection', (socket) => {
   const snake = new Snake()
   .joinArena(arena)
   .tail([
@@ -21,22 +27,17 @@ socket.on('connection', (innerSocket) => {
     {x: 5, y: 8},
   ]);
 
-  innerSocket.on('message', (message) => {
-    snake.turn(message)
+  socket.on('message', (message) => {
+    snake.turn(message);
   });
-})
+});
 
-
-const broadcastBySocket = (() => {
-
-  return (data) => {
-    socket.clients.forEach((client) => {
-      client.send(data);
-    })
-  };
-})();
-
+const broadcastBySocket = ((data) => {
+  socketServer.clients.forEach((client) => {
+    client.send(data);
+  });
+});
 
 arena.toStream()
 .map(JSON.stringify)
-.subscribe(broadcastBySocket)
+.subscribe(broadcastBySocket);

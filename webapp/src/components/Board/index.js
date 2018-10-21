@@ -17,7 +17,7 @@ class Board extends Component {
   }
 
   render() {
-    const { data } = this.state; 
+    const { data } = this.state;
     if (!data) {
       return <div />
     }
