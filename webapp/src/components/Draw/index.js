@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-const fieldSize = 20;
+const fieldSize = 15;
 
-class Inner extends Component {
+class Draw extends Component {
 
   componentDidMount() {
     this.updateCanvas();
@@ -63,4 +63,4 @@ class Inner extends Component {
   }
 }
 
-export default Inner;
+export default Draw;

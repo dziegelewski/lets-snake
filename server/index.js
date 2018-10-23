@@ -4,11 +4,11 @@ const WebSocket = require('ws');
 
 const Arena = require('./Arena');
 const Snake = require('./Snake');
-const { map } = require('./maps');
+const { levelsSequence } = require('./levels');
 
 const PORT = process.env.PORT || 9000; 
 
-const arena = new Arena().useMap(map);
+const arena = new Arena().useLevelsGenerator(levelsSequence);
 
 const socketServer = new WebSocket.Server(
   { port: PORT },
@@ -16,28 +16,21 @@ const socketServer = new WebSocket.Server(
 );
 
 socketServer.on('connection', (socket) => {
-  const snake = new Snake()
-  .joinArena(arena)
-  .tail([
-    {x: 10, y: 8},
-    {x: 9, y: 8},
-    {x: 8, y: 8},
-    {x: 7, y: 8},
-    {x: 6, y: 8},
-    {x: 5, y: 8},
-  ]);
+  const snake = new Snake().joinArena(arena);
 
   socket.on('message', (message) => {
     snake.turn(message);
   });
 });
 
-const broadcastBySocket = ((data) => {
+const broadcastToEveryone = ((data) => {
   socketServer.clients.forEach((client) => {
     client.send(data);
   });
 });
 
-arena.toStream()
+const arenaStream = arena.stream();
+
+arenaStream
 .map(JSON.stringify)
-.subscribe(broadcastBySocket);
+.subscribe(broadcastToEveryone);

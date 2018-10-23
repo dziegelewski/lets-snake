@@ -1,3 +1,4 @@
+const sample = require('lodash/sample')
 let snakeIds = 0;
 
 class Snake {
@@ -5,31 +6,33 @@ class Snake {
   constructor() {
     this.id = ++snakeIds;
     this.food = 0;
+    this.name = Snake.randomName();
 
     this.direction = 'right';
   }
 
   joinArena(arena) {
     this.arena = arena;
-    arena.registerSnake(this)
-    this.startMoving();
+    arena.registerSnake(this);
 
     return this;
   }
 
+  born(field) {
+    this.fields = [field];
+    this.food = 2;
+
+    return this;
+  }
 
   startMoving() {
     this.moveInterval = setInterval(() => {
       this.move();
-    }, 150)
+    }, 150);
   }
 
-  tail(fields) {
-    this.fields = fields;
-
-    this.renderOnArena();
-
-    return this;
+  stopMoving() {
+    clearInterval(this.moveInterval);
   }
 
   turn(newDirection) {
@@ -86,7 +89,7 @@ class Snake {
   }
 
   die() {
-    clearInterval(this.moveInterval);
+    this.stopMoving()
   }
 
   get head() {
@@ -112,6 +115,10 @@ class Snake {
       case 'right':
         return dir2 === 'up' || dir2 === 'down';
     }
+  }
+
+  static randomName() {
+    return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
   }
 }
 

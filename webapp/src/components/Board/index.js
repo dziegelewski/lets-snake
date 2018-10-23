@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import BigMessage from '../BigMessage';
+import SnakesList from '../SnakesList';
 import Draw from '../Draw';
 
 class Board extends Component {
@@ -18,15 +20,22 @@ class Board extends Component {
 
   render() {
     const { data } = this.state;
-    if (!data) {
-      return <div />
-    }
-
     return (
-      <Draw data={data} />
-    )
+      <div style={{ margin: '20px auto', textAlign: 'center', 'position': 'relative' }}>
+      {data && data.message && (
+        <BigMessage text={data.message} />
+      )} 
+      {data ? (
+        <>
+        <Draw data={data} />
+        <SnakesList names={data.snakesNames} />
+        </>
+      ) : (
+        <p>Waitng for your connection...</p>
+      )}
+      </div>
+    );
   }
-
 }
 
 export default Board;
