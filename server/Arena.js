@@ -1,6 +1,8 @@
 const { EventEmitter } = require('events');
 const Rx = require('rxjs/Rx');
+
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+const StartingPoint = require('./utils/StartingPoint');
 
 class Arena extends EventEmitter {
 
@@ -165,7 +167,7 @@ class Arena extends EventEmitter {
 
     this.gameIsOn = false;
 
-    this.startingPoints = pullFields(levelMap, 's');
+    this.startingPoints = pullFieldsMatrix(levelMap, 'R', 'L', 'U', 'D').map(StartingPoint.fromArray);
     this.obstacles = pullFields(levelMap, 'x');
     this.food = pullFields(levelMap, 'o');
 
@@ -225,6 +227,12 @@ function pullFields(array3d, searchedSign) {
     return total;
 
   }, []).flat()
+}
+
+function pullFieldsMatrix(array3d, ...searchedSigns) {
+  return searchedSigns.map((sign) => {
+    return pullFields(array3d, sign).map((point) => [point, sign])
+  }).flat();
 }
 
 

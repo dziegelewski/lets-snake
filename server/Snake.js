@@ -18,8 +18,9 @@ class Snake {
     return this;
   }
 
-  born(field) {
-    this.fields = [field];
+  born(startingPoint) {
+    this.fields = [startingPoint.field];
+    this.direction = startingPoint.direction;
     this.food = 2;
 
     return this;
