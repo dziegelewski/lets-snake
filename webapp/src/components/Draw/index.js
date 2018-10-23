@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const fieldSize = 15;
+import { fieldSize } from '../../consts';
 
 class Draw extends Component {
 
@@ -28,10 +28,8 @@ class Draw extends Component {
     })
   }
 
-  drawPoint(ctx, { x, y }, color) {
-    if (color) {
-      ctx.fillStyle = color;
-    }
+  drawPoint(ctx, { x, y }, color = 'black') {
+   ctx.fillStyle = color;
 
     ctx.fillRect(
       x * fieldSize,
@@ -39,8 +37,6 @@ class Draw extends Component {
       fieldSize,
       fieldSize
     );
-
-    ctx.fillStyle = 'black';
   }
 
   clearCanvas(ctx) {

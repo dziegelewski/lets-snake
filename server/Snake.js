@@ -26,16 +26,6 @@ class Snake {
     return this;
   }
 
-  startMoving() {
-    this.moveInterval = setInterval(() => {
-      this.move();
-    }, 150);
-  }
-
-  stopMoving() {
-    clearInterval(this.moveInterval);
-  }
-
   turn(newDirection) {
     const { lastDirection } = this;
 
@@ -76,22 +66,21 @@ class Snake {
     }
 
     this.fields = newFields;
-    this.renderOnArena();
-
     this.lastDirection = direction;
   }
 
-  renderOnArena() {
-    this.arena.moveSnake(this)
-  }
-
   obtainFood() {
-    this.food++;
+    this.food+= 4;
   }
 
-  die() {
-    this.stopMoving()
+  provideDetails() {
+    return {
+      name: this.name,
+      id: this.id,
+    }
   }
+
+  die() {}
 
   get head() {
     if (this.fields && this.fields.length) {

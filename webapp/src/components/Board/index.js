@@ -1,38 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import BigMessage from '../BigMessage';
 import SnakesList from '../SnakesList';
 import Draw from '../Draw';
+import Point from '../Point';
 
 class Board extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: null,
-    }
-  }
-
-  componentDidMount() {
-    this.props.socket.addEventListener('message', (message) => {
-      this.setState({ data: JSON.parse(message.data) })
-    })
-  }
-
   render() {
-    const { data } = this.state;
+    const { data } = this.props;
+    const { message, foodLeft, snakesDetails } = data;
+
     return (
       <div style={{ margin: '20px auto', textAlign: 'center', 'position': 'relative' }}>
-      {data && data.message && (
-        <BigMessage text={data.message} />
+      {message && (
+        <BigMessage text={message} />
       )} 
-      {data ? (
-        <>
-        <Draw data={data} />
-        <SnakesList names={data.snakesNames} />
-        </>
-      ) : (
-        <p>Waitng for your connection...</p>
-      )}
+        <Fragment>
+          <h1>{foodLeft} <Point pink /></h1>
+          <Draw data={data} />
+          <SnakesList snakes={snakesDetails} />
+        </Fragment>
       </div>
     );
   }

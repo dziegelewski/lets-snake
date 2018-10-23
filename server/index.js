@@ -29,8 +29,8 @@ const broadcastToEveryone = ((data) => {
   });
 });
 
-const arenaStream = arena.stream();
+const arenaStream = arena.toStream();
 
 arenaStream
-.map(JSON.stringify)
-.subscribe(broadcastToEveryone);
+  .map(JSON.stringify)
+  .subscribe(broadcastToEveryone);

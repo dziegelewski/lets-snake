@@ -33,7 +33,7 @@ const levelsArray = [
 // ],
 
 
- [
+[[
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 'x                            x',
 'x    o                  o    x',
@@ -64,11 +64,11 @@ const levelsArray = [
 'x                            x',
 'x                            x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-],
+]],
 
 
 
- [
+ [[
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 'x                                         x',
 'x                                         x',
@@ -86,14 +86,14 @@ const levelsArray = [
 'x          xxxxxxxxxx                     x',
 'x                                         x',
 'x                                         x',
-'x                       L                x',
+'x                       L                 x',
 'x                                         x',
 'x                                         x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-],
+]],
 
 
- [
+ [[
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 'x                                         x',
 'x                                    L    x',
@@ -117,7 +117,7 @@ const levelsArray = [
 'x                                         x',
 'x                                         x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-],
+]],
 
 
 

@@ -1,5 +1,7 @@
 const { EventEmitter } = require('events');
 const Rx = require('rxjs/Rx');
+const sample = require('lodash/sample');
+const without = require('lodash/without');
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 const StartingPoint = require('./utils/StartingPoint');
@@ -14,14 +16,52 @@ class Arena extends EventEmitter {
 
     this.startingPoints = [];
     this.obstacles = [];
+
+    this.foodSpots = [];
     this.food = [];
+    this.foodLeft = 10;
+
     this.snakes = {};
 
-    this.message = null;
+    this.snakesMovingInterval = null;
   }
 
-  stream() {
+  startSnakes() {
+    this.stopSnakes();
+    this.snakesMovingInterval = setInterval(() => {
+
+      this.eachSnake((snake) => snake.move());
+      this.eachSnake((snake) => this.checkSnakePosition(snake));
+
+      this.stream({
+        snakesFields: this.snakesFields,
+        food: this.food
+      })
+
+    }, 150);
+  }
+
+  stopSnakes() {
+    clearInterval(this.snakesMovingInterval);
+  }
+
+  toStream() {
     return Rx.Observable.fromEvent(this, 'stream');
+  }
+
+  stream(data) {
+    this.emit('stream', data);
+  }
+
+  streamAll() {
+    this.emit('stream', {
+      width: this.width,
+      height: this.height,
+      obstacles: this.obstacles,
+      food: this.food,
+      snakesFields: this.snakesFields,
+      snakesDetails: this.eachSnake((snake) => snake.provideDetails()),
+    });
   }
 
   setSize(width, height = width) {
@@ -29,55 +69,37 @@ class Arena extends EventEmitter {
     this.height = height; 
   }
 
-  redraw() {
-    this.emit('stream', this.extractedFields());
-  }
-
-  extractedFields() {
-    return {
-      width: this.width,
-      height: this.height,
-      obstacles: this.obstacles,
-      food: this.food,
-      snakesFields: this.snakesFields,
-      snakesNames: this.eachSnake(snake => snake.name),
-      message: this.message,
-    }
-  }
-
   registerSnake(snake) {
     this.snakes[snake.id] = snake;
     snake.born(
       this.startingPoints[0]
     );
-    this.redraw();
+    this.streamAll();
 
-    if (this.gameIsOn) {
-      snake.startMoving();
-    } else {
+    if (!this.gameIsOn) {
       this.beginGame();
     }
   }
 
-  goSnakes() {
-    this.eachSnake(snake => snake.startMoving());
-  }
-
-  moveSnake(snake) {
-    const whatsOnField = this.checkField(snake.head);
+  checkSnakePosition(snake) {
+    const whatsOnField = this.checkField(snake.head, snake);
 
     switch(whatsOnField) {
       case 'food':
         snake.obtainFood();
         this.removeFood(snake.head);
-        if (this.food.length === 0) this.levelCompleted();
+        if (this.foodLeft === 0) {
+          this.levelCompleted();
+        } else {
+          this.distributeFood();
+        }
         break;
       case 'obstacle':
+      case 'snake':
         this.killSnake(snake);
       default:
     }
 
-    this.redraw();
     return this;
   }
 
@@ -87,6 +109,7 @@ class Arena extends EventEmitter {
 
     if (!this.hasAnySnakes) {
       this.gameIsOn = false;
+      this.stopSnakes();
     }
   }
 
@@ -114,7 +137,7 @@ class Arena extends EventEmitter {
     return this.getSnakes().length > 0; 
   }
 
-  checkField(field) {
+  checkField(field, snake) {
     const checkIfIsOnField  = (comparedPoint) => Arena.comparePoints(comparedPoint, field);
 
     if (this.food.some(checkIfIsOnField)) {
@@ -125,11 +148,28 @@ class Arena extends EventEmitter {
       return 'obstacle';
     }
 
+    if ((snake
+        ? (without(this.snakesFields, snake.head))
+        : this.snakesFields
+        ).some(checkIfIsOnField)
+      ) {
+      return 'snake';
+    }
+
     return null;
   }
 
+
+  distributeFood() {
+    this.stream({ foodLeft: this.foodLeft });
+    this.foodLeft--;
+    this.food.push(
+      sample(this.foodSpots)
+    );
+  }
+
   levelCompleted() {
-    this.eachSnake((snake) => snake.stopMoving());
+    this.stopSnakes();
     this.emit('completed');
 
     if (this.levelsGenerator) {
@@ -158,7 +198,9 @@ class Arena extends EventEmitter {
     return this;
   }
 
-  useLevel(levelMap) {
+  useLevel([levelMap, {
+    food = 10,
+  } = {}]) {
 
     const width = levelMap.reduce((longestRowLength, row) => Math.max(row.length, longestRowLength), 0);
     const height = levelMap.length;
@@ -169,13 +211,18 @@ class Arena extends EventEmitter {
 
     this.startingPoints = pullFieldsMatrix(levelMap, 'R', 'L', 'U', 'D').map(StartingPoint.fromArray);
     this.obstacles = pullFields(levelMap, 'x');
-    this.food = pullFields(levelMap, 'o');
+    this.foodSpots = pullFields(levelMap, 'o');
+
+    this.foodLeft = 10;
+
+    this.distributeFood();
 
     if (this.hasAnySnakes) {
       this.rebornSnakes();
       this.beginGame();
     }
 
+    this.streamAll();
     return this;
   }
 
@@ -192,7 +239,7 @@ class Arena extends EventEmitter {
 
       this.gameIsOn = true;
       this.countdown()
-        .then(() => this.goSnakes())
+        .then(() => this.startSnakes())
     }
   }
 
@@ -201,13 +248,12 @@ class Arena extends EventEmitter {
       await this.shout(i, 1000);
     }
     await this.shout('Go Snakes', 1000);
-    this.message = null;
+    this.stream({ message: null });
     await wait(100);
   }
 
   async shout(message, time) {
-    this.message = message;
-    this.redraw();
+    this.stream({ message });
     await wait(time);
   }
 }
