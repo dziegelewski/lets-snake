@@ -21,6 +21,8 @@ class Arena extends EventEmitter {
     this.food = [];
     this.foodLeft = 10;
 
+    this.tempo = null;
+
     this.snakes = {};
 
     this.snakesMovingInterval = null;
@@ -38,7 +40,7 @@ class Arena extends EventEmitter {
         food: this.food
       })
 
-    }, 150);
+    }, this.tempo);
   }
 
   stopSnakes() {
@@ -53,14 +55,16 @@ class Arena extends EventEmitter {
     this.emit('stream', data);
   }
 
-  streamAll() {
+  streamAll(extras) {
     this.emit('stream', {
       width: this.width,
       height: this.height,
       obstacles: this.obstacles,
       food: this.food,
+      foodLeft: this.foodLeft,
       snakesFields: this.snakesFields,
       snakesDetails: this.eachSnake((snake) => snake.provideDetails()),
+      ...extras,
     });
   }
 
@@ -87,6 +91,8 @@ class Arena extends EventEmitter {
     switch(whatsOnField) {
       case 'food':
         snake.obtainFood();
+        this.foodLeft--;
+        this.stream({ foodLeft: this.foodLeft })
         this.removeFood(snake.head);
         if (this.foodLeft === 0) {
           this.levelCompleted();
@@ -106,6 +112,8 @@ class Arena extends EventEmitter {
   killSnake(snake) {
     snake.die();
     delete this.snakes[snake.id];
+
+    this.streamAll();
 
     if (!this.hasAnySnakes) {
       this.gameIsOn = false;
@@ -159,10 +167,7 @@ class Arena extends EventEmitter {
     return null;
   }
 
-
   distributeFood() {
-    this.stream({ foodLeft: this.foodLeft });
-    this.foodLeft--;
     this.food.push(
       sample(this.foodSpots)
     );
@@ -184,8 +189,12 @@ class Arena extends EventEmitter {
     }
   }
 
-  allLevelsCompleted() {}
-
+  async allLevelsCompleted() {
+    this.snakes = {};
+    this.streamAll({
+      message: "That's it for today! Come back later!",
+    });
+  }
 
   static comparePoints(point1, point2) {
     return (point1.x === point2.x) && (point1.y === point2.y);
@@ -199,7 +208,8 @@ class Arena extends EventEmitter {
   }
 
   useLevel([levelMap, {
-    food = 10,
+    tempo: levelTempo = 150,
+    food: levelFood = 10,
   } = {}]) {
 
     const width = levelMap.reduce((longestRowLength, row) => Math.max(row.length, longestRowLength), 0);
@@ -213,7 +223,9 @@ class Arena extends EventEmitter {
     this.obstacles = pullFields(levelMap, 'x');
     this.foodSpots = pullFields(levelMap, 'o');
 
-    this.foodLeft = 10;
+    this.tempo = levelTempo;
+    this.foodLeft = levelFood;
+    
 
     this.distributeFood();
 
@@ -223,6 +235,7 @@ class Arena extends EventEmitter {
     }
 
     this.streamAll();
+
     return this;
   }
 

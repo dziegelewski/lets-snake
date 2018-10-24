@@ -64,11 +64,11 @@ const levelsArray = [
 'x                            x',
 'x                            x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-]],
+], { food: 10 }],
 
 
 
- [[
+[[
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 'x                                         x',
 'x                                         x',
@@ -85,19 +85,43 @@ const levelsArray = [
 'x                   x                     x',
 'x          xxxxxxxxxx                     x',
 'x                                         x',
-'x                                         x',
+'x          o     o                        x',
 'x                       L                 x',
 'x                                         x',
 'x                                         x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-]],
+], { food: 15 }],
 
 
- [[
+[[
+'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+'x                                                        x',
+'x                          o      o                      x',
+'x  o    R        o                      o      L     o   x',
+'x                                                        x',
+'x                                                        x',
+'x  o    R       o          o      o            l     o   x',
+'x                                                        x',
+'x                                                        x',
+'x                                                        x',
+'x                                                        x',
+'x                          o      o                      x',
+'x  o    R        o                      o      L     o   x',
+'x                                                        x',
+'x                                                        x',
+'x  o    R       o          o      o            l     o   x',
+'x                                                        x',
+'x                                                        x',
+'x                                                        x',
+'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+], { food: 20, tempo: 100, }],
+
+
+[[
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 'x                                         x',
 'x                                    L    x',
-'x     R                                   x',
+'x     R        o    o       o             x',
 'x                                         x',
 'x  x  x  x  x  x  x  x  x  x  x  x  x  x  x',
 'x                                         x',
@@ -109,11 +133,8 @@ const levelsArray = [
 'x                                         x',
 'x  x  x  x  x  x  x  x  x  x  x  x  x  x  x',
 'x                                         x',
-'x                                         x',
 'x     R                                   x',
-'x                                         x',
-'x                                         x',
-'x                                   L     x',
+'x              o    o       o       L     x',
 'x                                         x',
 'x                                         x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',

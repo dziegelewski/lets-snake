@@ -70,7 +70,7 @@ class Snake {
   }
 
   obtainFood() {
-    this.food+= 4;
+    this.food++;
   }
 
   provideDetails() {
