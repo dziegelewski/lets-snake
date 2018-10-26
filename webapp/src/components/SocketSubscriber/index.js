@@ -1,22 +1,48 @@
 import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
 
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+
 class SocketSubscriber extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      socket: null,
       data: {},
+      error: false,
+      reconnectCountdown: null,
     }
+
+    this.handleConnectionError = this.handleConnectionError.bind(this);
   }
 
-   componentDidMount() {
-      this.props.socket.addEventListener('message', (message) => {
+  componentDidMount() {
+    this.connectToSocket();
+  }
+
+  connectToSocket() {
+    this.setState({
+      error: false,
+      reconnectCountdown: null,
+      reconnectInterval: null,
+      socket: new WebSocket(this.props.socketUrl),
+    }, () => {
+
+      const { socket } = this.state;
+
+      socket.addEventListener('message', (message) => {
         this.handleMessageData(
           JSON.parse(message.data)
         );
       });
-    }
+
+      socket.addEventListener('error', this.handleConnectionError);
+      socket.addEventListener('close', () => setTimeout(() => {
+        this.handleConnectionError();
+      }, 1000))
+    });
+  }
 
    handleMessageData(incomingData) {
     this.setState({
@@ -27,22 +53,53 @@ class SocketSubscriber extends Component {
     });
   }
 
+  handleConnectionError() {
+    this.setState({
+      error: true,
+      reconnectCountdown: 5,
+    }, () => {
+      const { reconnectCountdown } = this.state;
+      clearInterval(this.reconnectInterval);
+      this.reconnectInterval = setInterval(() => {
+        this.setState(oldState => ({
+          reconnectCountdown: oldState.reconnectCountdown - 1
+        }), () => {
+           if (!this.state.reconnectCountdown) {
+             clearInterval(this.reconnectInterval);
+             this.connectToSocket();
+           }
+        })
+      }, 1000)
+
+    })
+  }
+
   get isLoading() {
    return isEmpty(this.state.data);
   }
 
   render() { 
+
+    if (this.state.error) {
+      return (
+        <h1>
+          We couldn't connect.<br/>
+          Next attempt in {this.state.reconnectCountdown}
+        </h1>
+      )
+    }
+
     if (this.isLoading) {
       return (
-        <p>Waitng for your connection...</p>
+        <h1>Waitng for your connection...</h1>
       )
     }
 
     return (
       <Fragment>
-      {React.cloneElement(this.props.children, { data: this.state.data })}
+        {this.props.children(this.state.data, this.state.socket)}
       </Fragment>
-    )
+    );
   }
 } 
 

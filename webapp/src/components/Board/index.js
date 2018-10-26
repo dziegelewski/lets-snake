@@ -11,7 +11,7 @@ class Board extends Component {
     const { message, foodLeft, snakesDetails } = data;
 
     return (
-      <div style={{ margin: '20px auto', textAlign: 'center', 'position': 'relative' }}>
+      <div style={{ margin: '0 auto' }}>
       {message && (
         <BigMessage text={message} />
       )} 
