@@ -139,9 +139,6 @@ const levelsArray = [
 'x                                         x',
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 ]],
-
-
-
 ];
 
 const levelsSequence = (function*(levels) {
@@ -153,16 +150,14 @@ const levelsSequence = (function*(levels) {
 })(levelsArray)
 
 const hardness = (level, lap) => {
-  const [layout, {
-    food = 10,
-    tempo = 150,
-  }] = level;
+  const [layout, { food = 20, tempo = 150, grow = 1 } = {}] = level;
 
   return [
     layout,
     {
       food: food + (5 * lap),
       tempo: tempo * (1 - lap * 0.1),
+      grow,
     }
   ]
 }

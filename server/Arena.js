@@ -2,9 +2,10 @@ const { EventEmitter } = require('events');
 const Rx = require('rxjs/Rx');
 const sample = require('lodash/sample');
 const without = require('lodash/without');
+const wait = require('delay');
 
-const wait = (ms) => new Promise((res) => setTimeout(res, ms));
-const StartingPoint = require('./utils/StartingPoint');
+const readLevelMap = require('./utils/readLevelMap');
+
 
 class Arena extends EventEmitter {
 
@@ -17,11 +18,13 @@ class Arena extends EventEmitter {
     this.startingPoints = [];
     this.obstacles = [];
 
+    this.foodLeft = undefined;
+    this.tempo = undefined;
+    this.grow = undefined;
+
+
     this.foodSpots = [];
     this.food = [];
-    this.foodLeft = 10;
-
-    this.tempo = null;
 
     this.snakes = {};
 
@@ -55,7 +58,7 @@ class Arena extends EventEmitter {
     this.emit('stream', data);
   }
 
-  streamAll(extras) {
+  streamEverything(extras) {
     this.emit('stream', {
       width: this.width,
       height: this.height,
@@ -78,7 +81,7 @@ class Arena extends EventEmitter {
     snake.born(
       this.startingPoints[0]
     );
-    this.streamAll();
+    this.streamEverything();
 
     if (!this.gameIsOn) {
       this.beginGame();
@@ -97,7 +100,7 @@ class Arena extends EventEmitter {
         if (this.foodLeft === 0) {
           this.levelCompleted();
         } else {
-          this.distributeFood();
+          this.putFootOnTheBoard();
         }
         break;
       case 'obstacle':
@@ -113,7 +116,7 @@ class Arena extends EventEmitter {
     snake.die();
     delete this.snakes[snake.id];
 
-    this.streamAll();
+    this.streamEverything();
 
     if (!this.hasAnySnakes) {
       this.gameIsOn = false;
@@ -167,7 +170,7 @@ class Arena extends EventEmitter {
     return null;
   }
 
-  distributeFood() {
+  putFootOnTheBoard() {
     this.food.push(
       sample(this.foodSpots)
     );
@@ -191,7 +194,7 @@ class Arena extends EventEmitter {
 
   async allLevelsCompleted() {
     this.snakes = {};
-    this.streamAll({
+    this.streamEverything({
       message: "That's it for today! Come back later!",
     });
   }
@@ -208,33 +211,34 @@ class Arena extends EventEmitter {
   }
 
   useLevel([levelMap, {
-    tempo: levelTempo = 150,
-    food: levelFood = 10,
+    tempo: levelTempo,
+    food: levelFood,
+    grow: levelGrow,
   } = {}]) {
 
-    const width = levelMap.reduce((longestRowLength, row) => Math.max(row.length, longestRowLength), 0);
-    const height = levelMap.length;
+    const readedMap = readLevelMap(levelMap)
+    const [width, height] = readedMap.size;
 
     this.setSize(width, height);
 
     this.gameIsOn = false;
 
-    this.startingPoints = pullFieldsMatrix(levelMap, 'R', 'L', 'U', 'D').map(StartingPoint.fromArray);
-    this.obstacles = pullFields(levelMap, 'x');
-    this.foodSpots = pullFields(levelMap, 'o');
+    this.startingPoints = readedMap.startingPoints;
+    this.obstacles = readedMap.obstacles;
+    this.foodSpots = readedMap.foodSpots;
 
     this.tempo = levelTempo;
     this.foodLeft = levelFood;
+    this.grow = levelGrow;
     
-
-    this.distributeFood();
+    this.putFootOnTheBoard();
 
     if (this.hasAnySnakes) {
       this.rebornSnakes();
       this.beginGame();
     }
 
-    this.streamAll();
+    this.streamEverything();
 
     return this;
   }
@@ -269,29 +273,6 @@ class Arena extends EventEmitter {
     this.stream({ message });
     await wait(time);
   }
-}
-
-function pullFields(array3d, searchedSign) {
-
-  return array3d.reduce((total, row, y) => {
-
-    const totalFromRow = row.split('').reduce((total2, sign, x) => {
-      if (sign === searchedSign) {
-        total2.push({ x, y });
-      }
-      return total2;
-    }, []);
-
-    total.push(totalFromRow);
-    return total;
-
-  }, []).flat()
-}
-
-function pullFieldsMatrix(array3d, ...searchedSigns) {
-  return searchedSigns.map((sign) => {
-    return pullFields(array3d, sign).map((point) => [point, sign])
-  }).flat();
 }
 
 
