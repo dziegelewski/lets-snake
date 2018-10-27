@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Message from '../Message';
 
-const wait = (ms) => new Promise((res) => setTimeout(res, ms));
-
 class SocketSubscriber extends Component {
 
   constructor(props) {
@@ -84,7 +82,7 @@ class SocketSubscriber extends Component {
     if (this.state.error) {
       return (
         <Message>
-          We couldn't connect.<br/>
+          Connection error :(<br/>
           Next attempt in {this.state.reconnectCountdown}
         </Message>
       )

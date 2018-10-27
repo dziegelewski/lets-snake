@@ -2,11 +2,11 @@ import React from 'react';
 
 import { colors } from '../../consts';
 
-const Message = ({ children = '', showIf = true, color = colors.default }) => {
+const Message = ({ children, showIf = true, color = colors.default }) => {
 
   if (!showIf) return null;
 
-  const fontSize = children.toString().length === 1 ? 60 : 40;
+  const fontSize = (children && children.toString().length === 1) ? 60 : 40;
   return (
     <div style={{
       'position': 'absolute',

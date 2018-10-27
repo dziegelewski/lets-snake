@@ -40,20 +40,20 @@ class Snake {
     if (!direction) return;
 
     const newFields = [...this.fields];
-    const newHeadPosition = {...this.fields[0]};
+    const newHeadPosition = Array.from(this.fields[0]);
 
     switch(direction) {
-      case "up":
-        newHeadPosition.y--;
-        break;
-      case "down":
-        newHeadPosition.y++;
-        break;
       case "left":
-        newHeadPosition.x--;
+        newHeadPosition[0]--;
         break;
       case "right":
-        newHeadPosition.x++;
+        newHeadPosition[0]++;
+        break;
+      case "up":
+        newHeadPosition[1]--;
+        break;
+      case "down":
+        newHeadPosition[1]++;
         break;
     }
 
@@ -69,8 +69,8 @@ class Snake {
     this.lastDirection = direction;
   }
 
-  obtainFood() {
-    this.food++;
+  obtainFood(growingSpeed) {
+    this.food += growingSpeed;
   }
 
   provideDetails() {

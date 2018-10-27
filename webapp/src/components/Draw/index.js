@@ -28,7 +28,7 @@ function useCanvas(canvasRef, data) {
       clearCanvas(ctx, data.width, data.height);
       drawManyPoints(ctx, data.obstacles);
       drawManyPoints(ctx, data.food, colors.food);
-      drawManyPoints(ctx, data.snakesFields, colors.snake);
+      drawManyPoints(ctx, data.snakes, colors.snake);
     }
   });
 }
@@ -40,7 +40,7 @@ function drawManyPoints(ctx, points, color = colors.default) {
   });
 }
 
-function drawPoint(ctx, { x, y }) {
+function drawPoint(ctx, [x, y]) {
   ctx.fillRect(
     x * fieldSize,
     y * fieldSize,

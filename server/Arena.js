@@ -15,18 +15,15 @@ class Arena extends EventEmitter {
     this.width = 0;
     this.height = 0;
 
-    this.startingPoints = [];
-    this.obstacles = [];
-
     this.foodLeft = undefined;
     this.tempo = undefined;
     this.grow = undefined;
 
-
+    this.obstacles = [];
     this.foodSpots = [];
     this.food = [];
-
     this.snakes = {};
+    this.startingPoints = [];
 
     this.snakesMovingInterval = null;
   }
@@ -39,7 +36,7 @@ class Arena extends EventEmitter {
       this.eachSnake((snake) => this.checkSnakePosition(snake));
 
       this.stream({
-        snakesFields: this.snakesFields,
+        snakes: this.snakesFields,
         food: this.food
       })
 
@@ -65,7 +62,7 @@ class Arena extends EventEmitter {
       obstacles: this.obstacles,
       food: this.food,
       foodLeft: this.foodLeft,
-      snakesFields: this.snakesFields,
+      snakes: this.snakesFields,
       snakesDetails: this.eachSnake((snake) => snake.provideDetails()),
       ...extras,
     });
@@ -93,7 +90,7 @@ class Arena extends EventEmitter {
 
     switch(whatsOnField) {
       case 'food':
-        snake.obtainFood();
+        snake.obtainFood(this.grow);
         this.foodLeft--;
         this.stream({ foodLeft: this.foodLeft })
         this.removeFood(snake.head);
@@ -149,20 +146,20 @@ class Arena extends EventEmitter {
   }
 
   checkField(field, snake) {
-    const checkIfIsOnField  = (comparedPoint) => Arena.comparePoints(comparedPoint, field);
+    const isOnField = (comparedPoint) => Arena.comparePoints(comparedPoint, field);
 
-    if (this.food.some(checkIfIsOnField)) {
+    if (this.food.some(isOnField)) {
       return 'food';
     }
 
-    if (this.obstacles.some(checkIfIsOnField)) {
+    if (this.obstacles.some(isOnField)) {
       return 'obstacle';
     }
 
     if ((snake
         ? (without(this.snakesFields, snake.head))
         : this.snakesFields
-        ).some(checkIfIsOnField)
+        ).some(isOnField)
       ) {
       return 'snake';
     }
@@ -200,7 +197,7 @@ class Arena extends EventEmitter {
   }
 
   static comparePoints(point1, point2) {
-    return (point1.x === point2.x) && (point1.y === point2.y);
+    return point1.toString() === point2.toString();
   }
 
   useLevelsGenerator(levelsGenerator) {
