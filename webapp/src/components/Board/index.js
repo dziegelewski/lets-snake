@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import BigMessage from '../BigMessage';
+import Message from '../Message';
 import SnakesList from '../SnakesList';
 import Draw from '../Draw';
 import Point from '../Point';
@@ -11,15 +11,12 @@ class Board extends Component {
     const { message, foodLeft, snakesDetails } = data;
 
     return (
-      <div style={{ margin: '0 auto' }}>
-      {message && (
-        <BigMessage text={message} />
-      )} 
-        <Fragment>
-          <h1>{foodLeft} <Point pink /></h1>
-          <Draw data={data} />
-          <SnakesList snakes={snakesDetails} />
-        </Fragment>
+    <div style={{ margin: '20px auto', textAlign: 'center', 'position': 'relative' }}>  
+        <Message showIf={message} color={'green'}>
+          {message}
+        </Message>
+        <Draw data={data} />
+        <SnakesList snakes={snakesDetails} />
       </div>
     );
   }

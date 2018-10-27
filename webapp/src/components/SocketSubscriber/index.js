@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
+import Message from '../Message';
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -82,16 +83,18 @@ class SocketSubscriber extends Component {
 
     if (this.state.error) {
       return (
-        <h1>
+        <Message>
           We couldn't connect.<br/>
           Next attempt in {this.state.reconnectCountdown}
-        </h1>
+        </Message>
       )
     }
 
     if (this.isLoading) {
       return (
-        <h1>Waitng for your connection...</h1>
+        <Message>
+          Waitng for your connection...
+        </Message>
       )
     }
 
