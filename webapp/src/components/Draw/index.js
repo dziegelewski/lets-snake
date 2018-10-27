@@ -1,62 +1,58 @@
-import React, { Component } from 'react';
+import React, { useRef, useEffect } from 'react';
 
-import { fieldSize } from '../../consts';
+import {
+  fieldSize,
+  colors,
+} from '../../consts';
 
-class Draw extends Component {
+const Draw = ({ data }) => {
 
-  componentDidMount() {
-    this.updateCanvas();
-  }
+  const canvasRef = useRef();
+  useCanvas(canvasRef, data);
 
-  componentDidUpdate() {
-    this.updateCanvas();
-  }
+  return (
+    <canvas
+      ref={canvasRef}
+      width={data.width * fieldSize}
+      height={data.height * fieldSize}
+    />
+  )
+}
 
-  updateCanvas() {
-    const ctx = this.refs.canvas.getContext('2d');
-    const { data } = this.props;
+function useCanvas(canvasRef, data) {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
 
-    this.clearCanvas(ctx);
-    this.drawManyPoints(ctx, data.obstacles);
-    this.drawManyPoints(ctx, data.food, 'pink');
-    this.drawManyPoints(ctx, data.snakesFields, 'green');
-  }
+      clearCanvas(ctx, data.width, data.height);
+      drawManyPoints(ctx, data.obstacles);
+      drawManyPoints(ctx, data.food, colors.food);
+      drawManyPoints(ctx, data.snakesFields, colors.snake);
+    }
+  });
+}
 
-  drawManyPoints(ctx, points, color) {
-    points.forEach((point) => {
-      this.drawPoint(ctx, point, color);
-    })
-  }
+function drawManyPoints(ctx, points, color = colors.default) {
+  ctx.fillStyle = color;
+  points.forEach((point) => {
+    drawPoint(ctx, point);
+  });
+}
 
-  drawPoint(ctx, { x, y }, color = 'black') {
-   ctx.fillStyle = color;
+function drawPoint(ctx, { x, y }) {
+  ctx.fillRect(
+    x * fieldSize,
+    y * fieldSize,
+    fieldSize,
+    fieldSize,
+  );
+}
 
-    ctx.fillRect(
-      x * fieldSize,
-      y * fieldSize,
-      fieldSize,
-      fieldSize
-    );
-  }
-
-  clearCanvas(ctx) {
-    ctx.clearRect(
-      0, 0, this.props.data.width * fieldSize, this.props.data.height * fieldSize
-    );
-  }
-
-  render() {
-    const { data } = this.props;
-    return (
-      <canvas
-        ref="canvas"
-        width={data.width * fieldSize}
-        height={data.height * fieldSize}
-      />
-    )
-
-
-  }
+function clearCanvas(ctx, width, height) {
+  ctx.clearRect(
+    0, 0, width * fieldSize, height * fieldSize
+  );
 }
 
 export default Draw;
