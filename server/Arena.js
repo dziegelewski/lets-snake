@@ -12,8 +12,7 @@ class Arena extends EventEmitter {
   constructor() {
     super();
 
-    this.width = 0;
-    this.height = 0;
+    this.size = [0, 0];
 
     this.foodLeft = undefined;
     this.tempo = undefined;
@@ -57,8 +56,7 @@ class Arena extends EventEmitter {
 
   streamEverything(extras) {
     this.emit('stream', {
-      width: this.width,
-      height: this.height,
+      size: this.size,
       obstacles: this.obstacles,
       food: this.food,
       foodLeft: this.foodLeft,
@@ -66,11 +64,6 @@ class Arena extends EventEmitter {
       snakesDetails: this.eachSnake((snake) => snake.provideDetails()),
       ...extras,
     });
-  }
-
-  setSize(width, height = width) {
-    this.width = width;
-    this.height = height; 
   }
 
   registerSnake(snake) {
@@ -213,13 +206,11 @@ class Arena extends EventEmitter {
     grow: levelGrow,
   } = {}]) {
 
-    const readedMap = readLevelMap(levelMap)
-    const [width, height] = readedMap.size;
-
-    this.setSize(width, height);
-
     this.gameIsOn = false;
 
+    const readedMap = readLevelMap(levelMap)
+
+    this.size = readedMap.size;
     this.startingPoints = readedMap.startingPoints;
     this.obstacles = readedMap.obstacles;
     this.foodSpots = readedMap.foodSpots;

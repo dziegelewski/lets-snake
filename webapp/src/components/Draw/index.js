@@ -13,8 +13,8 @@ const Draw = ({ data }) => {
   return (
     <canvas
       ref={canvasRef}
-      width={data.width * fieldSize}
-      height={data.height * fieldSize}
+      width={data.size[0] * fieldSize}
+      height={data.size[1] * fieldSize}
     />
   )
 }
@@ -25,7 +25,7 @@ function useCanvas(canvasRef, data) {
     if (canvas) {
       const ctx = canvas.getContext('2d');
 
-      clearCanvas(ctx, data.width, data.height);
+      clearCanvas(ctx, data.size);
       drawManyPoints(ctx, data.obstacles);
       drawManyPoints(ctx, data.food, colors.food);
       drawManyPoints(ctx, data.snakes, colors.snake);
@@ -49,7 +49,7 @@ function drawPoint(ctx, [x, y]) {
   );
 }
 
-function clearCanvas(ctx, width, height) {
+function clearCanvas(ctx, [width, height]) {
   ctx.clearRect(
     0, 0, width * fieldSize, height * fieldSize
   );
