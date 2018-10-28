@@ -1,6 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import Point from 'components/Point';
+
+import { times } from 'utils';
 import { colors } from 'consts';
 
 import './style.css';
@@ -16,15 +18,24 @@ const SnakesList = ({ snakes }) => {
     );
   }
 
+  const scores = (numberOfScores) => {
+    return (
+      <span>
+        <Point color={colors.food} />
+        {numberOfScores}
+      </span>
+    )
+  };
+
   const trophies = (numberOfTrophies) => {
     return (
-      <Fragment>
-        {new Array(numberOfTrophies).fill(null).map((trophy, index) => (
+      <span>
+        {times(numberOfTrophies, (index) => (
           <Point color={colors.trophy} key={index} />
         ))}
-      </Fragment>
+      </span>
     )
-  } 
+  };
 
   return (
     <div>
@@ -32,13 +43,17 @@ const SnakesList = ({ snakes }) => {
       <ul>
         {
           snakes.map((snake) => (
-            <p
+            <li
+              className="snake-list-item"
               style={{ color: colors.snake }} 
               key={snake.id}
             > 
               {snake.name}
+
+              {scores(snake.scores)}
+
               {trophies(snake.trophies)}
-            </p>
+            </li>
           ))
         }
       </ul>

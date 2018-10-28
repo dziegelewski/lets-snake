@@ -8,3 +8,7 @@ Array.prototype.flat = function() {
     return total;
   }, [])
 }
+
+Array.prototype.flatMap = function(mapFn) {
+  return this.map(mapFn).flat();
+}

@@ -88,8 +88,8 @@ class Snake {
       name: this.name,
       id: this.id,
       trophies: this.trophies,
-
-    }
+      scores: this.length - foodOnBorn - 1,
+    };
   }
 
   die() {}

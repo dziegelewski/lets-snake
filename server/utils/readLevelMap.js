@@ -51,7 +51,7 @@ function readPoints(levelMap) {
 
 function startingPointsFromPoints(points) {
 
-  return ['R', 'L', 'U', 'D'].map((direction) => {
+  return ['R', 'L', 'U', 'D'].flatMap((direction) => {
 
     if (points.hasOwnProperty(direction)) {
       return points[direction].map((xyOfDirection) => {
@@ -62,7 +62,6 @@ function startingPointsFromPoints(points) {
       return []
     }
   })
-    .flat()
     .map(StartingPoint.fromArray)
 }
 

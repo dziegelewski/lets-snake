@@ -28,7 +28,7 @@ function useCanvas(canvasRef, data) {
       clearCanvas(ctx, data.size);
       drawManyPoints(ctx, data.obstacles);
       drawManyPoints(ctx, data.food, colors.food);
-      drawManyPoints(ctx, data.snakes, colors.snake);
+      drawManyPoints(ctx, data.snakesFields, colors.snake);
     }
   });
 }

@@ -34,10 +34,7 @@ class Arena extends EventEmitter {
       this.eachSnake((snake) => snake.move());
       this.eachSnake((snake) => this.checkSnakePosition(snake));
 
-      this.stream({
-        snakes: this.snakesFields,
-        food: this.food
-      })
+      this.stream('snakesFields', 'food');
 
     }, this.tempo);
   }
@@ -50,20 +47,32 @@ class Arena extends EventEmitter {
     return Rx.Observable.fromEvent(this, 'stream');
   }
 
-  stream(data) {
-    this.emit('stream', data);
+  stream(...data) {
+
+    const dataToStream = data.reduce((acc, value) => {
+
+      let parsedValue;
+      if (typeof value === 'string') {
+        parsedValue = { [value]: this[value] };
+      } else {
+        parsedValue = value;
+      }
+
+      return { ...acc, ...parsedValue };
+    }, {});
+
+    this.emit('stream', dataToStream);
   }
 
-  streamEverything(extras) {
-    this.emit('stream', {
-      size: this.size,
-      obstacles: this.obstacles,
-      food: this.food,
-      foodLeft: this.foodLeft,
-      snakes: this.snakesFields,
-      snakesDetails: this.eachSnake((snake) => snake.provideDetails()),
-      ...extras,
-    });
+  streamEverything() {
+    this.stream(
+      'size',
+      'obstacles',
+      'food',
+      'foodLeft',
+      'snakesFields',
+      'snakesDetails',
+    );
   }
 
   registerSnake(snake) {
@@ -85,7 +94,7 @@ class Arena extends EventEmitter {
       case 'food':
         snake.obtainFood(this.grow);
         this.foodLeft--;
-        this.stream({ foodLeft: this.foodLeft })
+        this.stream('foodLeft', 'snakesDetails');
         this.removeFood(snake.head);
         if (this.foodLeft === 0) {
           this.levelCompleted();
@@ -128,14 +137,19 @@ class Arena extends EventEmitter {
     return this.getSnakes().map(fn);
   }
 
-  get snakesFields() {
-    return this.eachSnake((snake) => {
-      return snake.fields || []
-    }).flat() || []
-  }
 
   get hasAnySnakes() {
     return this.getSnakes().length > 0; 
+  }
+
+  get snakesFields() {
+    return this.eachSnake((snake) => {
+      return snake.fields || []
+    }).flat() || [];
+  }
+
+  get snakesDetails() {
+    return this.eachSnake((snake) => snake.provideDetails());
   }
 
   checkField(field, snake) {
@@ -180,6 +194,7 @@ class Arena extends EventEmitter {
     const winners = findLongestSnake(this.snakes);
 
     winners.forEach(snake => snake.obtainTrophy());
+    this.stream('snakesDetails');
     await this.shout(
       this.generateWinnerMessage(winners),
       2500,
@@ -205,9 +220,10 @@ class Arena extends EventEmitter {
 
   async allLevelsCompleted() {
     this.snakes = {};
-    this.streamEverything({
+    this.streamEverything();
+    this.stream({
       message: "That's it for today! Come back later!",
-    });
+    })
   }
 
   static comparePoints(point1, point2) {
@@ -262,7 +278,6 @@ class Arena extends EventEmitter {
 
   async beginGame() {
     if (!this.gameIsOn) {
-      await wait(1000);      
       this.gameIsOn = true;
       this.countdown()
         .then(() => this.startSnakes())
