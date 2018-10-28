@@ -32,7 +32,16 @@ describe('readLevelMawp', () => {
     ]);
   });
 
-  it.skip('return starting points correctly', () => {
-    // @todo
+  it('return starting points correctly', () => {
+    expect(readedMap.startingPoints).to.be.deep.equal([
+      { field: [ 13, 2 ], direction: 'right' },
+      { field: [ 18, 2 ], direction: 'right' },
+      { field: [ 13, 1 ], direction: 'left' },
+      { field: [ 18, 1 ], direction: 'left' },
+      { field: [ 13, 3 ], direction: 'up' },
+      { field: [ 18, 3 ], direction: 'up' },
+      { field: [ 13, 4 ], direction: 'down' },
+      { field: [ 18, 4 ], direction: 'down' }
+    ])
   });
 });
