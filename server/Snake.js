@@ -1,11 +1,13 @@
-const sample = require('lodash/sample')
+const sample = require('lodash/sample');
+const reduce = require('lodash/reduce');
 let snakeIds = 0;
 
 class Snake {
 
-  constructor() {
+  constructor(length = 0) {
     this.id = ++snakeIds;
     this.food = 0;
+    this.fields = new Array(length);
     this.name = Snake.randomName();
 
     this.direction = 'right';
@@ -90,6 +92,10 @@ class Snake {
     }
   }
 
+  get length() {
+    return this.fields.length + this.food;
+  }
+
   static readDirection(arrowKey) {
     return arrowKey
       .replace('Arrow', '')
@@ -109,6 +115,29 @@ class Snake {
 
   static randomName() {
     return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
+  }
+
+  static findLongest(snakesObj) {
+
+    return reduce(
+      snakesObj,
+      (acc, snake) => {
+        if (acc.length === 0) {
+          return [snake];
+        }
+        if (snake.length > acc[0].length) {
+
+          return [snake];
+        }
+
+        if (snake.length === acc[0].length) {
+
+          return [...acc, snake];
+        }
+        return acc;
+      },
+      []
+    );
   }
 }
 
