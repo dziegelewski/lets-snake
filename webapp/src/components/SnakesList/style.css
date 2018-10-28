@@ -1,3 +1,9 @@
+.snakes-list {
+  padding-left: 0;
+  text-align: left;
+
+}
+
 .snake-list-item {
   list-style: none;
 }

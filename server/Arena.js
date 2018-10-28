@@ -186,7 +186,6 @@ class Arena extends EventEmitter {
 
     await this.anounceAndRewardWinner();
 
-
     this.nextLevel();
   }
 

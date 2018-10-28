@@ -8,16 +8,21 @@ import Draw from 'components/Draw';
 import './style.css';
 
 const Board = ({ data }) => {
-  const { message, foodLeft, snakesDetails } = data;
+  const { message = null, foodLeft, snakesDetails } = data;
 
   return (
-  <div className="board">
-      <Message showIf={message} color={'green'}>
-        {message}
-      </Message>
-      <Draw data={data} />
-      <FoodLeft foodLeft={foodLeft} />
-      <SnakesList snakes={snakesDetails} />
+    <div className="board">
+      <div className="board__column board__column--main">
+        <Draw data={data}>
+          <Message showIf={message} color={'green'}>
+            {message}
+          </Message>
+        </Draw>
+      </div>
+      <div className="board__column">
+        <FoodLeft foodLeft={foodLeft} />
+        <SnakesList snakes={snakesDetails} />
+      </div>
     </div>
   );
 }

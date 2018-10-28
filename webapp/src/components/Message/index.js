@@ -8,12 +8,13 @@ const Message = ({ children, showIf = true, color = colors.default }) => {
 
   if (!showIf) return null;
 
-  const fontSize = (children && children.toString().length === 1) ? 60 : 40;
+  const isBig = children && children.toString().length === 1;
+
   return (
-    <div className="message" style={{
-      'fontSize': `${fontSize}px`,
-      'color': color,
-    }}>
+    <div
+      className={"message" + (isBig ? ' message--big' : '')}
+      style={{ 'color': color }}
+    >
       {children}
     </div>
    )

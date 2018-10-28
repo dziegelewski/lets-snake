@@ -1,4 +1,4 @@
-const levelsArray = [
+module.exports = [
 //  [
 // 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 // 'x                            x',
@@ -140,29 +140,3 @@ const levelsArray = [
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 ]],
 ];
-
-const levelsSequence = (function*(levels) {
-  for (let lap = 0; lap < Infinity; lap++) {
-    for (let i = 0; i < levels.length; i++) {
-      yield hardness(levels[i], lap);
-    }
-  }
-})(levelsArray)
-
-const hardness = (level, lap) => {
-  const [layout, { food = 20, tempo = 150, grow = 1 } = {}] = level;
-
-  return [
-    layout,
-    {
-      food: food + (5 * lap),
-      tempo: tempo * (1 - lap * 0.1),
-      grow,
-    }
-  ]
-}
-
-module.exports = {
-  levelsArray,
-  levelsSequence,
-}

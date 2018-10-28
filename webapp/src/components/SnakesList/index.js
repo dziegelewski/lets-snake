@@ -40,7 +40,7 @@ const SnakesList = ({ snakes }) => {
   return (
     <div>
       <p>Active snakes:</p>
-      <ul>
+      <ul className="snakes-list">
         {
           snakes.map((snake) => (
             <li

@@ -5,18 +5,29 @@ import {
   colors,
 } from 'consts';
 
-const Draw = ({ data }) => {
+import './style.css';
+
+const Draw = ({ data, children }) => {
 
   const canvasRef = useRef();
   useCanvas(canvasRef, data);
 
+  const width = data.size[0] * fieldSize;
+  const height = data.size[1] * fieldSize;
+
   return (
-    <canvas
-      ref={canvasRef}
-      width={data.size[0] * fieldSize}
-      height={data.size[1] * fieldSize}
-    />
-  )
+    <div
+      className="draw-wrapper"
+      style={{ width: `${width}px`, height: `${height}px` }}
+    >
+      <canvas
+        ref={canvasRef}
+        width={width}
+        height={height}
+      />
+      {children}
+    </div>
+  );
 }
 
 function useCanvas(canvasRef, data) {

@@ -4,7 +4,8 @@ const WebSocket = require('ws');
 
 const Arena = require('./Arena');
 const Snake = require('./Snake');
-const { levelsSequence } = require('./levels');
+
+const levelsSequence = require('./levelsSequence');
 
 const PORT = process.env.PORT || 9000; 
 
@@ -34,3 +35,6 @@ const arenaStream = arena.toStream();
 arenaStream
   .map(JSON.stringify)
   .subscribe(broadcastToEveryone);
+
+const ImmovableSnake = require('./utils/ImmovableSnake');
+new ImmovableSnake().joinArena(arena);

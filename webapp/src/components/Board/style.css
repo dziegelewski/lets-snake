@@ -1,5 +1,16 @@
 .board {
   margin: 20px auto;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.board__column {
   position: relative;
+  padding: 0 10px;
+  flex: 1;
+}
+
+.board__column--main {
+  flex: 1;
+  text-align: right;
 }
