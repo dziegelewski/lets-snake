@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+
+import Point from '../Point';
+import { colors } from '../../consts';
 
 const SnakesList = ({ snakes }) => {
 
@@ -11,6 +14,16 @@ const SnakesList = ({ snakes }) => {
     );
   }
 
+  const trophies = (numberOfTrophies) => {
+    return (
+      <Fragment>
+        {new Array(numberOfTrophies).fill(null).map((trophy, index) => (
+          <Point color={colors.trophy} key={index} />
+        ))}
+      </Fragment>
+    )
+  } 
+
   return (
     <div>
       <h1>Active snakes:</h1>
@@ -20,8 +33,9 @@ const SnakesList = ({ snakes }) => {
             <h2
               style={{ color: 'green' }} 
               key={snake.id}
-            >
+            > 
               {snake.name}
+              {trophies(snake.trophies)}
             </h2>
           ))
         }

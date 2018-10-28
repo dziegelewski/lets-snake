@@ -3,4 +3,5 @@ export const colors = {
   default: 'black',
   food: 'pink',
   snake: 'green',
+  trophy: '#E5950F',
 };

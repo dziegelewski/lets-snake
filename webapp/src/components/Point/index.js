@@ -2,8 +2,7 @@ import React from 'react';
 
 import { fieldSize } from '../../consts';
 
-const Point = (props) => {
-  const color = Object.keys(props)[0];
+const Point = ({ color }) => {
 
   return (
     <div style={{
@@ -12,6 +11,7 @@ const Point = (props) => {
       display: 'inline-block',
       verticalAlign: 'middle',
       backgroundColor: color,
+      margin: '0 3px',
     }} />
   )
 };

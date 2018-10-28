@@ -4,8 +4,8 @@ const sample = require('lodash/sample');
 const without = require('lodash/without');
 const wait = require('delay');
 
+const findLongestSnake = require('./Snake').findLongest;
 const readLevelMap = require('./utils/readLevelMap');
-
 
 class Arena extends EventEmitter {
 
@@ -166,10 +166,32 @@ class Arena extends EventEmitter {
     );
   }
 
-  levelCompleted() {
+  async levelCompleted() {
     this.stopSnakes();
     this.emit('completed');
 
+    await this.anounceAndRewardWinner();
+
+
+    this.nextLevel();
+  }
+
+  async anounceAndRewardWinner() {
+    const winners = findLongestSnake(this.snakes);
+
+    winners.forEach(snake => snake.obtainTrophy());
+    await this.shout(
+      this.generateWinnerMessage(winners),
+      2500,
+    )
+    this.stream({ message: null });
+  }
+
+  generateWinnerMessage(snakesWinners) {
+    return snakesWinners.map(snake => snake.name).join(' and ') + ' wins';
+  }
+
+  nextLevel() {
     if (this.levelsGenerator) {
       const { done, value } = this.levelsGenerator.next();
       
@@ -178,7 +200,6 @@ class Arena extends EventEmitter {
       } else {
         this.useLevel(value);
       }
-
     }
   }
 
@@ -239,9 +260,9 @@ class Arena extends EventEmitter {
     })
   }
 
-  beginGame() {
+  async beginGame() {
     if (!this.gameIsOn) {
-
+      await wait(1000);      
       this.gameIsOn = true;
       this.countdown()
         .then(() => this.startSnakes())

@@ -1,5 +1,8 @@
 const sample = require('lodash/sample');
 const reduce = require('lodash/reduce');
+
+const foodOnBorn = 2;
+
 let snakeIds = 0;
 
 class Snake {
@@ -7,6 +10,7 @@ class Snake {
   constructor(length = 0) {
     this.id = ++snakeIds;
     this.food = 0;
+    this.trophies = 0;
     this.fields = new Array(length);
     this.name = Snake.randomName();
 
@@ -23,7 +27,7 @@ class Snake {
   born(startingPoint) {
     this.fields = [startingPoint.field];
     this.direction = startingPoint.direction;
-    this.food = 2;
+    this.food = foodOnBorn;
 
     return this;
   }
@@ -75,10 +79,16 @@ class Snake {
     this.food += growingSpeed;
   }
 
+  obtainTrophy() {
+    this.trophies++;
+  }
+
   provideDetails() {
     return {
       name: this.name,
       id: this.id,
+      trophies: this.trophies,
+
     }
   }
 
@@ -117,7 +127,7 @@ class Snake {
     return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
   }
 
-  static findLongest(snakesObj) {
+  static findWithBiggestValue(value = 'length', snakesObj) {
 
     return reduce(
       snakesObj,
@@ -125,12 +135,12 @@ class Snake {
         if (acc.length === 0) {
           return [snake];
         }
-        if (snake.length > acc[0].length) {
+        if (snake[value] > acc[0][value]) {
 
           return [snake];
         }
 
-        if (snake.length === acc[0].length) {
+        if (snake[value] === acc[0][value]) {
 
           return [...acc, snake];
         }
@@ -139,6 +149,11 @@ class Snake {
       []
     );
   }
+
+  static findLongest(snakesObj) {
+    return Snake.findWithBiggestValue('length', snakesObj);
+  }
 }
 
 module.exports = Snake;
+
