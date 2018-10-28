@@ -26,12 +26,18 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader"
       },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
     ]
   },
   resolve: {
     alias: {
-      'components': path.resolve(__dirname, 'components')
-    }
+      'components': path.join(__dirname, 'src/components'),
+      'consts': path.join(__dirname, 'src/consts')
+    },
+    extensions: ['.js']
   },
   devServer: {
     historyApiFallback: true

@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { fieldSize } from '../../consts';
+import { fieldSize } from 'consts';
+
+import './style.css';
 
 const Point = ({ color }) => {
 
   return (
-    <div style={{
+    <div className="point" style={{
       width: fieldSize,
       height: fieldSize,
-      display: 'inline-block',
-      verticalAlign: 'middle',
       backgroundColor: color,
-      margin: '0 3px',
     }} />
-  )
+  );
 };
 
 export default Point;

@@ -1,25 +1,25 @@
-import React, { Component, Fragment } from 'react';
-import Message from '../Message';
-import SnakesList from '../SnakesList';
-import Draw from '../Draw';
-import Point from '../Point';
+import React from 'react';
 
-class Board extends Component {
+import Message from 'components/Message';
+import SnakesList from 'components/SnakesList';
+import FoodLeft from 'components/FoodLeft';
+import Draw from 'components/Draw';
 
-  render() {
-    const { data } = this.props;
-    const { message, foodLeft, snakesDetails } = data;
+import './style.css';
 
-    return (
-    <div style={{ margin: '20px auto', textAlign: 'center', 'position': 'relative' }}>  
-        <Message showIf={message} color={'green'}>
-          {message}
-        </Message>
-        <Draw data={data} />
-        <SnakesList snakes={snakesDetails} />
-      </div>
-    );
-  }
+const Board = ({ data }) => {
+  const { message, foodLeft, snakesDetails } = data;
+
+  return (
+  <div className="board">
+      <Message showIf={message} color={'green'}>
+        {message}
+      </Message>
+      <Draw data={data} />
+      <FoodLeft foodLeft={foodLeft} />
+      <SnakesList snakes={snakesDetails} />
+    </div>
+  );
 }
 
 export default Board;

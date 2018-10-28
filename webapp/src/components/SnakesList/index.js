@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
 
-import Point from '../Point';
-import { colors } from '../../consts';
+import Point from 'components/Point';
+import { colors } from 'consts';
+
+import './style.css';
 
 const SnakesList = ({ snakes }) => {
 
@@ -10,7 +12,7 @@ const SnakesList = ({ snakes }) => {
 
   if (noPlayer) {
     return (
-      <h1>You may want to refresh your browser</h1>
+      <p>You may want to refresh your browser</p>
     );
   }
 
@@ -26,17 +28,17 @@ const SnakesList = ({ snakes }) => {
 
   return (
     <div>
-      <h1>Active snakes:</h1>
+      <p>Active snakes:</p>
       <ul>
         {
           snakes.map((snake) => (
-            <h2
-              style={{ color: 'green' }} 
+            <p
+              style={{ color: colors.snake }} 
               key={snake.id}
             > 
               {snake.name}
               {trophies(snake.trophies)}
-            </h2>
+            </p>
           ))
         }
       </ul>

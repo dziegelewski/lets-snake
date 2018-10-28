@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Board from './components/Board';
-import ControlYourSnake from './components/ControlYourSnake';
-import SocketSubscriber from './components/SocketSubscriber';
+import Board from 'components/Board';
+import ControlYourSnake from 'components/ControlYourSnake';
+import SocketSubscriber from 'components/SocketSubscriber';
 
- const socketUrl = process.env.NODE_ENV === 'production'
-   ? "ws://blooming-spire-36184.herokuapp.com"
-   : "ws://localhost:9000"
+import { socketUrl } from 'consts';
+
+import './index.css';
 
 ReactDOM.render(
   <SocketSubscriber socketUrl={socketUrl}>

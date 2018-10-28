@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { colors } from '../../consts';
+import { colors } from 'consts';
+
+import './style.css';
 
 const Message = ({ children, showIf = true, color = colors.default }) => {
 
@@ -8,17 +10,9 @@ const Message = ({ children, showIf = true, color = colors.default }) => {
 
   const fontSize = (children && children.toString().length === 1) ? 60 : 40;
   return (
-    <div style={{
-      'position': 'absolute',
-      'width': '100%',
-      'height': '100%',
-      'backgroundColor': 'rgba(255, 255, 255, 0.7)',
+    <div className="message" style={{
       'fontSize': `${fontSize}px`,
-      'display': 'flex',
-      'justifyContent': 'center',
-      'alignItems': 'center',
       'color': color,
-      'fontWeight': '800',
     }}>
       {children}
     </div>

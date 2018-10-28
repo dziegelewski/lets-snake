@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import {
   fieldSize,
   colors,
-} from '../../consts';
+} from 'consts';
 
 const Draw = ({ data }) => {
 

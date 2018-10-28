@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import Message from '../Message';
+import Message from 'components/Message';
+
 
 class SocketSubscriber extends Component {
 
@@ -57,7 +58,6 @@ class SocketSubscriber extends Component {
       error: true,
       reconnectCountdown: 5,
     }, () => {
-      const { reconnectCountdown } = this.state;
       clearInterval(this.reconnectInterval);
       this.reconnectInterval = setInterval(() => {
         this.setState(oldState => ({
