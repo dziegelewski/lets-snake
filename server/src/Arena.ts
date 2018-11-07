@@ -2,11 +2,11 @@ import Timeout = NodeJS.Timeout;
 import point from './point';
 
 import * as Rx from 'rxjs/Rx';
+import Snake from './Snake';
 import { EventEmitter } from 'events';
 import { sample, without } from 'lodash';
 import wait from 'delay';
 
-import Snake from './Snake';
 import StartingPoint from './utils/StartingPoint';
 import readLevelMap from './utils/readLevelMap';
 const findLongestSnake = Snake.findLongest;
@@ -233,7 +233,7 @@ class Arena extends EventEmitter {
     return point1.toString() === point2.toString();
   }
 
-  useLevelsGenerator(levelsGenerator): this {
+  useLevelsGenerator(levelsGenerator: Generator): this {
     this.levelsGenerator = levelsGenerator;
     this.useLevel(levelsGenerator.next().value);
 
@@ -289,7 +289,7 @@ class Arena extends EventEmitter {
 
   async countdown(): Promise<void> {
     for (let i = 3; i > 0; i--) {
-      await this.shout(i, 1000);
+      await this.shout(i.toString(), 1000);
     }
     await this.shout('Go Snakes', 1000);
     this.stream({ message: null });
@@ -300,6 +300,13 @@ class Arena extends EventEmitter {
     this.stream({ message });
     await wait(time);
   }
+}
+
+
+function deliverMail(): Promise<number> {
+  return new Promise((resolve, reject) => {
+
+  })
 }
 
 

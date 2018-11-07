@@ -1,30 +1,39 @@
-const sample = require('lodash/sample');
-const reduce = require('lodash/reduce');
+import { sample, reduce } from 'lodash';
+
+import Arena from './Arena';
+import StartingPoint from './utils/StartingPoint';
+import point from './point';
+import direction from './direction';
 
 const foodOnBorn = 2;
 
 let snakeIds = 0;
 
 class Snake {
+  id: number;
+  food: number = 0;
+  trophies: number = 0;
+  fields: point[]; 
+  name: string;
+  direction: direction;
+  lastDirection: direction;
+  arena: Arena;
 
-  constructor(length = 0) {
+  constructor(length: number = 0) {
     this.id = ++snakeIds;
-    this.food = 0;
-    this.trophies = 0;
     this.fields = new Array(length);
     this.name = Snake.randomName();
-
     this.direction = 'right';
   }
 
-  joinArena(arena) {
+  joinArena(arena: Arena): this {
     this.arena = arena;
     arena.registerSnake(this);
 
     return this;
   }
 
-  born(startingPoint) {
+  born(startingPoint: StartingPoint) {
     this.fields = [startingPoint.field];
     this.direction = startingPoint.direction;
     this.food = foodOnBorn;
@@ -32,7 +41,7 @@ class Snake {
     return this;
   }
 
-  turn(newDirection) {
+  turn(newDirection: direction): void {
     const { lastDirection } = this;
 
     if (Snake.directionIsIn90degsToDirection(newDirection, lastDirection)) {
@@ -40,13 +49,12 @@ class Snake {
     }
   }
 
-  move() {
+  move(): void {
     const { direction } = this;
 
     if (!direction) return;
 
-    const newFields = [...this.fields];
-    const newHeadPosition = Array.from(this.fields[0]);
+    const newHeadPosition = (this.fields[0].slice() as point);
 
     switch(direction) {
       case "left":
@@ -63,7 +71,11 @@ class Snake {
         break;
     }
 
-    newFields.unshift(newHeadPosition);
+    const newFields = [
+      newHeadPosition,
+      ...this.fields,
+    ]
+
 
     if (!this.food) {
       newFields.pop() 
@@ -75,15 +87,15 @@ class Snake {
     this.lastDirection = direction;
   }
 
-  obtainFood(growingSpeed) {
+  obtainFood(growingSpeed: number): void {
     this.food += growingSpeed;
   }
 
-  obtainTrophy() {
+  obtainTrophy(): void {
     this.trophies++;
   }
 
-  provideDetails() {
+  provideDetails(): object {
     return {
       name: this.name,
       id: this.id,
@@ -92,27 +104,27 @@ class Snake {
     };
   }
 
-  die() {}
+  die(): void {}
 
-  get head() {
+  get head(): point {
     if (this.fields && this.fields.length) {
       return this.fields[0];
     } else {
-      return {};
+      return null;
     }
   }
 
-  get length() {
+  get length(): number {
     return this.fields.length + this.food;
   }
 
-  static readDirection(arrowKey) {
-    return arrowKey
+  static readDirection(arrowKey: string): direction {
+    return <direction>arrowKey
       .replace('Arrow', '')
       .toLowerCase();
   }
 
-  static directionIsIn90degsToDirection(dir1, dir2) {
+  static directionIsIn90degsToDirection(dir1: direction, dir2: direction): boolean {
     switch(dir1) {
       case 'up':
       case 'down':
@@ -123,11 +135,11 @@ class Snake {
     }
   }
 
-  static randomName() {
+  static randomName(): string {
     return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
   }
 
-  static findWithBiggestValue(value = 'length', snakesObj) {
+  static findWithBiggestValue(value = 'length', snakesObj): Snake[] {
 
     return reduce(
       snakesObj,
@@ -150,10 +162,9 @@ class Snake {
     );
   }
 
-  static findLongest(snakesObj) {
+  static findLongest(snakesObj): Snake[] {
     return Snake.findWithBiggestValue('length', snakesObj);
   }
 }
 
-module.exports = Snake;
-
+export default Snake;

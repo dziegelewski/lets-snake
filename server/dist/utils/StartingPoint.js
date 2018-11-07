@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class StartingPoint {
     constructor(field, directionAbbrev) {
         this.field = field;
@@ -6,8 +8,8 @@ class StartingPoint {
     static fromArray([field, directionAbbrev]) {
         return new StartingPoint(field, directionAbbrev);
     }
-    static directionMap(direction) {
-        switch (direction) {
+    static directionMap(directionAbbrev) {
+        switch (directionAbbrev) {
             case 'L':
                 return 'left';
             case 'R':
@@ -21,5 +23,5 @@ class StartingPoint {
         }
     }
 }
-module.exports = StartingPoint;
+exports.default = StartingPoint;
 //# sourceMappingURL=StartingPoint.js.map

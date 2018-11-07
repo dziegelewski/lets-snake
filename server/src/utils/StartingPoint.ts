@@ -1,16 +1,21 @@
-class StartingPoint {
+import point from '../point';
+import direction from '../direction';
 
-  constructor(field, directionAbbrev) {
+class StartingPoint {
+  field: point;
+  direction: direction;
+
+  constructor(field: point, directionAbbrev: string) {
     this.field = field;
     this.direction = StartingPoint.directionMap(directionAbbrev);
   }
 
-  static fromArray([ field, directionAbbrev]) {
+  static fromArray([ field, directionAbbrev]: [point, string]) {
     return new StartingPoint(field, directionAbbrev)
   }
 
-  static directionMap(direction) {
-    switch(direction) {
+  static directionMap(directionAbbrev: string): direction {
+    switch(directionAbbrev) {
       case 'L':
       return 'left';
       case 'R':
@@ -25,4 +30,4 @@ class StartingPoint {
   }
 }
 
-module.exports = StartingPoint;
+export default StartingPoint;

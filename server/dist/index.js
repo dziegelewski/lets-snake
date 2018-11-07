@@ -17,7 +17,6 @@ socketServer.on('connection', (socket) => {
     });
 });
 const broadcastToEveryone = ((data) => {
-    // @ts-ignore
     socketServer.clients.forEach((client) => {
         client.send(data);
     });

@@ -1,12 +1,13 @@
-const sample = require('lodash/sample');
-const reduce = require('lodash/reduce');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
 const foodOnBorn = 2;
 let snakeIds = 0;
 class Snake {
     constructor(length = 0) {
-        this.id = ++snakeIds;
         this.food = 0;
         this.trophies = 0;
+        this.id = ++snakeIds;
         this.fields = new Array(length);
         this.name = Snake.randomName();
         this.direction = 'right';
@@ -32,8 +33,7 @@ class Snake {
         const { direction } = this;
         if (!direction)
             return;
-        const newFields = [...this.fields];
-        const newHeadPosition = Array.from(this.fields[0]);
+        const newHeadPosition = this.fields[0].slice();
         switch (direction) {
             case "left":
                 newHeadPosition[0]--;
@@ -48,7 +48,10 @@ class Snake {
                 newHeadPosition[1]++;
                 break;
         }
-        newFields.unshift(newHeadPosition);
+        const newFields = [
+            newHeadPosition,
+            ...this.fields,
+        ];
         if (!this.food) {
             newFields.pop();
         }
@@ -78,7 +81,7 @@ class Snake {
             return this.fields[0];
         }
         else {
-            return {};
+            return null;
         }
     }
     get length() {
@@ -100,10 +103,10 @@ class Snake {
         }
     }
     static randomName() {
-        return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
+        return lodash_1.sample(['Sth', 'Frv', 'Neu', 'Sgv']) + lodash_1.sample(['lugh', 'suss', 'evgh', 'vrssu']);
     }
     static findWithBiggestValue(value = 'length', snakesObj) {
-        return reduce(snakesObj, (acc, snake) => {
+        return lodash_1.reduce(snakesObj, (acc, snake) => {
             if (acc.length === 0) {
                 return [snake];
             }
@@ -120,5 +123,5 @@ class Snake {
         return Snake.findWithBiggestValue('length', snakesObj);
     }
 }
-module.exports = Snake;
+exports.default = Snake;
 //# sourceMappingURL=Snake.js.map

@@ -18,10 +18,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 const Rx = __importStar(require("rxjs/Rx"));
+const Snake_1 = __importDefault(require("./Snake"));
 const events_1 = require("events");
 const lodash_1 = require("lodash");
 const delay_1 = __importDefault(require("delay"));
-const Snake_1 = __importDefault(require("./Snake"));
 const readLevelMap_1 = __importDefault(require("./utils/readLevelMap"));
 const findLongestSnake = Snake_1.default.findLongest;
 class Arena extends events_1.EventEmitter {
@@ -224,7 +224,7 @@ class Arena extends events_1.EventEmitter {
     countdown() {
         return __awaiter(this, void 0, void 0, function* () {
             for (let i = 3; i > 0; i--) {
-                yield this.shout(i, 1000);
+                yield this.shout(i.toString(), 1000);
             }
             yield this.shout('Go Snakes', 1000);
             this.stream({ message: null });
@@ -237,6 +237,10 @@ class Arena extends events_1.EventEmitter {
             yield delay_1.default(time);
         });
     }
+}
+function deliverMail() {
+    return new Promise((resolve, reject) => {
+    });
 }
 module.exports = Arena;
 //# sourceMappingURL=Arena.js.map

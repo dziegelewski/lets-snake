@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "lib": ["es2018", "esnext.array"],
+    "lib": [
+      "es2018",
+      "esnext.array",
+      "dom"
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "allowJs": true,
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
+    "noImplicitAny": true,
     "outDir": "dist",
     "baseUrl": ".",
     "experimentalDecorators": true,

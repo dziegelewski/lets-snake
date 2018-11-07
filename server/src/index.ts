@@ -2,6 +2,7 @@ import WebSocket from 'ws';
 
 import Arena from './Arena';
 import Snake from './Snake';
+import direction from './direction';
 const { levelsSequence } = require('./levels');
 
 const PORT = parseInt(process.env.PORT) || 9000;
@@ -16,13 +17,12 @@ const socketServer = new WebSocket.Server(
 socketServer.on('connection', (socket) => {
   const snake = new Snake().joinArena(arena);
 
-  socket.on('message', (message) => {
+  socket.on('message', (message: direction) => {
     snake.turn(message);
   });
 });
 
-const broadcastToEveryone = ((data: Object) => {
-  // @ts-ignore
+const broadcastToEveryone = ((data: object) => {
     socketServer.clients.forEach((client) => {
     client.send(data);
   });
