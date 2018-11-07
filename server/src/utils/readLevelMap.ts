@@ -1,13 +1,26 @@
-const compact = require('lodash/compact');
-const StartingPoint = require('./StartingPoint');
+import StartingPoint from './StartingPoint';
+import point from "../point";
 
-function readLevelMap(levelMap) {
+type LevelMap = any;
+
+interface IReadMap {
+    size: point;
+    obstacles: point[];
+    foodSpots: point[];
+    startingPoints: StartingPoint[];
+}
+
+interface IPointsMap {
+  [letter: string]: point[];
+}
+
+function readLevelMap(levelMap: LevelMap): IReadMap {
 
   const size = readSize(levelMap);
   const points = readPoints(levelMap);
 
-  const obstacles = points['x'];
-  const foodSpots = points['o'];
+  const obstacles: point[] = points['x'];
+  const foodSpots: point[] = points['o'];
   const startingPoints = startingPointsFromPoints(points);
 
   return {
@@ -18,7 +31,7 @@ function readLevelMap(levelMap) {
   }
 }
 
-function readSize(levelMap) {
+function readSize(levelMap: LevelMap): point {
  const width = levelMap.reduce(
     (longestRowLength, row) => Math.max(row.length, longestRowLength),
     0
@@ -28,9 +41,9 @@ function readSize(levelMap) {
   return [width, height];
 }
 
-function readPoints(levelMap) {
+function readPoints(levelMap: LevelMap): IPointsMap {
 
-  const pointsTypes = {};
+  const pointsTypes: IPointsMap = {};
 
   levelMap.forEach((row, y) => {
 
@@ -49,7 +62,7 @@ function readPoints(levelMap) {
   return pointsTypes;
 }
 
-function startingPointsFromPoints(points) {
+function startingPointsFromPoints(points: IPointsMap): StartingPoint[] {
 
   return ['R', 'L', 'U', 'D'].flatMap((direction) => {
 
@@ -65,4 +78,4 @@ function startingPointsFromPoints(points) {
     .map(StartingPoint.fromArray)
 }
 
-module.exports = readLevelMap;
+export default readLevelMap;

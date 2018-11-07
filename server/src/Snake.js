@@ -106,6 +106,12 @@ class Snake {
     return this.fields.length + this.food;
   }
 
+  static readDirection(arrowKey) {
+    return arrowKey
+      .replace('Arrow', '')
+      .toLowerCase();
+  }
+
   static directionIsIn90degsToDirection(dir1, dir2) {
     switch(dir1) {
       case 'up':
