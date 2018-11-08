@@ -1,21 +1,18 @@
 import Timeout = NodeJS.Timeout;
-import point from './point';
+import { point, ISnakesCollection, level } from './types';
 
 import * as Rx from 'rxjs/Rx';
-import Snake from './Snake';
+import { Snake } from './Snake';
 import { EventEmitter } from 'events';
 import { sample, without } from 'lodash';
 import wait from 'delay';
 
-import StartingPoint from './utils/StartingPoint';
-import readLevelMap from './utils/readLevelMap';
+import StartingPoint from './StartingPoint';
+import readLevelMap from './readLevelMap';
 const findLongestSnake = Snake.findLongest;
 
-interface ISnakesCollection {
-  [snakeId: number]: Snake;
-}
 
-class Arena extends EventEmitter {
+export class Arena extends EventEmitter {
   foodLeft: number;
   tempo: number;
   grow: number;
@@ -31,6 +28,7 @@ class Arena extends EventEmitter {
 
   gameIsOn: boolean;
   levelsGenerator: Generator;
+  [index: string]: any;
 
   startSnakes(): void {
     this.stopSnakes();
@@ -52,9 +50,9 @@ class Arena extends EventEmitter {
     return Rx.Observable.fromEvent(this, 'stream');
   }
 
-  stream(...data): void {
+  stream(...data: (string | object)[]): void {
 
-    const dataToStream: Object = data.reduce((acc, value) => {
+    const dataToStream: object = data.reduce((acc: any, value) => {
 
       let parsedValue;
       if (typeof value === 'string') {
@@ -244,7 +242,7 @@ class Arena extends EventEmitter {
     tempo: levelTempo = 150,
     food: levelFood = 15,
     grow: levelGrow = 1,
-  } = {}]): this {
+  } = {}]: level): this {
 
     this.gameIsOn = false;
 
@@ -301,13 +299,3 @@ class Arena extends EventEmitter {
     await wait(time);
   }
 }
-
-
-function deliverMail(): Promise<number> {
-  return new Promise((resolve, reject) => {
-
-  })
-}
-
-
-export = Arena;

@@ -1,15 +1,13 @@
+import { point, direction, ISnakesCollection } from './types';
+import { Arena } from './Arena';
+import StartingPoint from './StartingPoint';
+
 import { sample, reduce } from 'lodash';
 
-import Arena from './Arena';
-import StartingPoint from './utils/StartingPoint';
-import point from './point';
-import direction from './direction';
-
 const foodOnBorn = 2;
-
 let snakeIds = 0;
 
-class Snake {
+export class Snake {
   id: number;
   food: number = 0;
   trophies: number = 0;
@@ -18,6 +16,7 @@ class Snake {
   direction: direction;
   lastDirection: direction;
   arena: Arena;
+  [value: string]: any;
 
   constructor(length: number = 0) {
     this.id = ++snakeIds;
@@ -139,7 +138,7 @@ class Snake {
     return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
   }
 
-  static findWithBiggestValue(value = 'length', snakesObj): Snake[] {
+  static findWithBiggestValue(value = 'length', snakesObj: ISnakesCollection): Snake[] {
 
     return reduce(
       snakesObj,
@@ -162,9 +161,7 @@ class Snake {
     );
   }
 
-  static findLongest(snakesObj): Snake[] {
+  static findLongest(snakesObj: ISnakesCollection): Snake[] {
     return Snake.findWithBiggestValue('length', snakesObj);
   }
 }
-
-export default Snake;

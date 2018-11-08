@@ -17,13 +17,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 const Rx = __importStar(require("rxjs/Rx"));
-const Snake_1 = __importDefault(require("./Snake"));
+const Snake_1 = require("./Snake");
 const events_1 = require("events");
 const lodash_1 = require("lodash");
 const delay_1 = __importDefault(require("delay"));
-const readLevelMap_1 = __importDefault(require("./utils/readLevelMap"));
-const findLongestSnake = Snake_1.default.findLongest;
+const readLevelMap_1 = __importDefault(require("./readLevelMap"));
+const findLongestSnake = Snake_1.Snake.findLongest;
 class Arena extends events_1.EventEmitter {
     constructor() {
         super(...arguments);
@@ -238,9 +239,5 @@ class Arena extends events_1.EventEmitter {
         });
     }
 }
-function deliverMail() {
-    return new Promise((resolve, reject) => {
-    });
-}
-module.exports = Arena;
+exports.Arena = Arena;
 //# sourceMappingURL=Arena.js.map

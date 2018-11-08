@@ -1,5 +1,4 @@
-import point from '../point';
-import direction from '../direction';
+import { point, direction } from './types';
 
 class StartingPoint {
   field: point;

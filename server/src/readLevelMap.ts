@@ -1,18 +1,5 @@
+import { point, LevelMap, IReadMap, IPointsMap } from "./types";
 import StartingPoint from './StartingPoint';
-import point from "../point";
-
-type LevelMap = any;
-
-interface IReadMap {
-    size: point;
-    obstacles: point[];
-    foodSpots: point[];
-    startingPoints: StartingPoint[];
-}
-
-interface IPointsMap {
-  [letter: string]: point[];
-}
 
 function readLevelMap(levelMap: LevelMap): IReadMap {
 
@@ -33,7 +20,7 @@ function readLevelMap(levelMap: LevelMap): IReadMap {
 
 function readSize(levelMap: LevelMap): point {
  const width = levelMap.reduce(
-    (longestRowLength, row) => Math.max(row.length, longestRowLength),
+    (longestRowLength: number, row: string): number => Math.max(row.length, longestRowLength),
     0
   );
   const height = levelMap.length;

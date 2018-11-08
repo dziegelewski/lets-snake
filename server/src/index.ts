@@ -1,8 +1,8 @@
 import WebSocket from 'ws';
 
-import Arena from './Arena';
-import Snake from './Snake';
-import direction from './direction';
+import { Arena } from './Arena';
+import { Snake } from './Snake';
+import { direction } from './types';
 const { levelsSequence } = require('./levels');
 
 const PORT = parseInt(process.env.PORT) || 9000;
@@ -31,5 +31,5 @@ const broadcastToEveryone = ((data: object) => {
 const arenaStream = arena.toStream();
 
 arenaStream
-  .map((value) => JSON.stringify(value))
+  .map((value: object) => JSON.stringify(value))
   .subscribe(broadcastToEveryone);

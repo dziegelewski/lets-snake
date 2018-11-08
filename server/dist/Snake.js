@@ -123,5 +123,5 @@ class Snake {
         return Snake.findWithBiggestValue('length', snakesObj);
     }
 }
-exports.default = Snake;
+exports.Snake = Snake;
 //# sourceMappingURL=Snake.js.map

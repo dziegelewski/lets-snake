@@ -1,12 +1,4 @@
-type LevelMap = string[];
-
-interface ILevelConfig {
-  food?: number;
-  tempo?: number;
-  grow?: number;
-}
-
-type level = [LevelMap, ILevelConfig?];
+import { LevelMap, ILevelConfig, level } from './types';
 
 const levelsArray: level[] = [
 //  [

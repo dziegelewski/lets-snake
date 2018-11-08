@@ -1,4 +1,4 @@
-const Arena = require('../dist/Arena').default;
+const { Arena } = require('../dist/Arena');
 
 describe('Arena', () => {
   describe('stream', () => {

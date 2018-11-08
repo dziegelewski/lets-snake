@@ -1,4 +1,4 @@
- const Snake = require('../dist/Snake').default;
+ const { Snake } = require('../dist/Snake');
  
  describe('Snake', () => {
    describe('static findLongest', () => {
