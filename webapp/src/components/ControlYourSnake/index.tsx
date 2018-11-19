@@ -1,4 +1,8 @@
-export default ({ socket }) => {
+interface Props {
+  socket: WebSocket;
+}
+
+export default ({ socket }: Props): any => {
   document.addEventListener('keydown', ({ key }) => {
     switch(key) {
       case "ArrowUp":
@@ -9,7 +13,7 @@ export default ({ socket }) => {
     }
   });
 
-  const sendDirection = (key) => {
+  const sendDirection = (key: string): void => {
     const direction = key
       .replace('Arrow', '')
       .toLowerCase();

@@ -5,9 +5,15 @@ import Point from 'components/Point';
 import { times } from 'utils';
 import { colors } from 'consts';
 
+import { ISnake } from 'types';
+
 import './style.css';
 
-const SnakesList = ({ snakes }) => {
+interface Props {
+  snakes: ISnake[];
+}
+
+const SnakesList = ({ snakes }: Props) => {
 
   const noPlayer = snakes.length === 0;
   // const singlePlayer = snakes.length === 1;
@@ -18,7 +24,7 @@ const SnakesList = ({ snakes }) => {
     );
   }
 
-  const scores = (numberOfScores) => {
+  const scores = (numberOfScores: number) => {
     return (
       <span>
         <Point color={colors.food} />
@@ -27,7 +33,7 @@ const SnakesList = ({ snakes }) => {
     )
   };
 
-  const trophies = (numberOfTrophies) => {
+  const trophies = (numberOfTrophies: number) => {
     return (
       <span>
         {times(numberOfTrophies, (index) => (

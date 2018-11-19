@@ -1,10 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 
 import { colors } from 'consts';
 
 import './style.css';
 
-const Message = ({ children, showIf = true, color = colors.default }) => {
+interface Props {
+  children?: any;
+  showIf?: boolean;
+  color?: string;
+}
+
+const Message = ({ children, showIf = true, color = colors.default }: Props) => {
 
   if (!showIf) return null;
 

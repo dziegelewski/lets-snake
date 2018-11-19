@@ -1,10 +1,14 @@
-import React from 'react';
+import * as React from 'react';
 
 import { fieldSize } from 'consts';
 
 import './style.css';
 
-const Point = ({ color }) => {
+interface Props {
+  color: string;
+}
+
+const Point = ({ color }: Props) => {
 
   return (
     <div className="point" style={{

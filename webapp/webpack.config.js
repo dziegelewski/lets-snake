@@ -13,6 +13,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        loader: "awesome-typescript-loader"
+      },
+      {
         enforce: "pre",
         test: /\.js$/,
         exclude: /node_modules/,
@@ -38,7 +42,7 @@ module.exports = {
       'utils': path.join(__dirname, 'src/utils'),
       'consts': path.join(__dirname, 'src/consts')
     },
-    extensions: ['.js']
+    extensions: [".ts", ".tsx", ".js", ".json"]
   },
   devServer: {
     historyApiFallback: true

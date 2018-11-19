@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2018",
+      "esnext.array",
+      "dom"
+    ],
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/types/*"
+      ],
+      "components/*": ["src/components/*"],
+      "utils": ["src/utils"],
+      "consts": ["src/consts"],
+      "types": ["src/types"]
+    },
+    "types": [
+      "lodash",
+      "node",
+      "react",
+      "react-dom",
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
