@@ -1,4 +1,4 @@
-const readLevelMap = require('../dist/utils/readLevelMap').default;
+const readLevelMap = require('../dist/readLevelMap').default;
 
 const levelMap = [
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',

@@ -1,4 +1,4 @@
-import Snake from './Snake';
+import { Snake } from './Snake';
 
 export type point = [number, number];
 
@@ -33,3 +33,7 @@ export interface ILevelConfig {
 }
 
 export type level = [LevelMap, ILevelConfig?];
+
+export interface IBroadcastedData {
+  value: string;
+}

@@ -105,7 +105,7 @@ class Snake {
     static randomName() {
         return lodash_1.sample(['Sth', 'Frv', 'Neu', 'Sgv']) + lodash_1.sample(['lugh', 'suss', 'evgh', 'vrssu']);
     }
-    static findWithBiggestValue(value = 'length', snakesObj) {
+    static findOnesWithBiggestValue(value = 'length', snakesObj) {
         return lodash_1.reduce(snakesObj, (acc, snake) => {
             if (acc.length === 0) {
                 return [snake];
@@ -120,7 +120,7 @@ class Snake {
         }, []);
     }
     static findLongest(snakesObj) {
-        return Snake.findWithBiggestValue('length', snakesObj);
+        return Snake.findOnesWithBiggestValue('length', snakesObj);
     }
 }
 exports.Snake = Snake;

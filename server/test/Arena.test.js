@@ -3,7 +3,7 @@ const { Arena } = require('../dist/Arena');
 describe('Arena', () => {
   describe('stream', () => {
 
-    it.skip('streams values with keys when they are given', (done) => {
+    it('streams values with keys when they are given', (done) => {
       const arena = new Arena();
 
       arena.on('stream', (streamed) => {
@@ -16,7 +16,7 @@ describe('Arena', () => {
 
     });
 
-    it.skip('streams own values with keys when only strings given', (done) => {
+    it('streams own values with keys when only strings given', (done) => {
       const arena = new Arena();
 
       arena.foodLeft = 10;

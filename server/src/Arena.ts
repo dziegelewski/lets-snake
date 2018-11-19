@@ -11,7 +11,6 @@ import StartingPoint from './StartingPoint';
 import readLevelMap from './readLevelMap';
 const findLongestSnake = Snake.findLongest;
 
-
 export class Arena extends EventEmitter {
   foodLeft: number;
   tempo: number;
@@ -46,7 +45,7 @@ export class Arena extends EventEmitter {
     clearInterval(this.snakesMovingInterval);
   }
 
-  toStream(): any {
+  toStream(): Rx.Observable<{}> {
     return Rx.Observable.fromEvent(this, 'stream');
   }
 
@@ -238,11 +237,14 @@ export class Arena extends EventEmitter {
     return this;
   }
 
-  useLevel([levelMap, {
-    tempo: levelTempo = 150,
-    food: levelFood = 15,
-    grow: levelGrow = 1,
-  } = {}]: level): this {
+  useLevel([
+    levelMap,
+      {
+        tempo: levelTempo = 150,
+        food: levelFood = 15,
+        grow: levelGrow = 1,
+      } = {}
+    ]: level): this {
 
     this.gameIsOn = false;
 

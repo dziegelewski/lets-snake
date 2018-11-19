@@ -32,7 +32,7 @@ export class Snake {
     return this;
   }
 
-  born(startingPoint: StartingPoint) {
+  born(startingPoint: StartingPoint): this {
     this.fields = [startingPoint.field];
     this.direction = startingPoint.direction;
     this.food = foodOnBorn;
@@ -138,7 +138,7 @@ export class Snake {
     return sample(['Sth', 'Frv', 'Neu', 'Sgv']) + sample(['lugh', 'suss', 'evgh', 'vrssu']);
   }
 
-  static findWithBiggestValue(value = 'length', snakesObj: ISnakesCollection): Snake[] {
+  static findOnesWithBiggestValue(value = 'length', snakesObj: ISnakesCollection): Snake[] {
 
     return reduce(
       snakesObj,
@@ -162,6 +162,6 @@ export class Snake {
   }
 
   static findLongest(snakesObj: ISnakesCollection): Snake[] {
-    return Snake.findWithBiggestValue('length', snakesObj);
+    return Snake.findOnesWithBiggestValue('length', snakesObj);
   }
 }

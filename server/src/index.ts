@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 
 import { Arena } from './Arena';
 import { Snake } from './Snake';
-import { direction } from './types';
+import { direction, IBroadcastedData } from './types';
 const { levelsSequence } = require('./levels');
 
 const PORT = parseInt(process.env.PORT) || 9000;
@@ -19,11 +19,11 @@ socketServer.on('connection', (socket) => {
 
   socket.on('message', (message: direction) => {
     snake.turn(message);
-  });
+  }); 
 });
 
-const broadcastToEveryone = ((data: object) => {
-    socketServer.clients.forEach((client) => {
+const broadcastToEveryone = ((data: string): void => {
+   socketServer.clients.forEach((client) => {
     client.send(data);
   });
 });
