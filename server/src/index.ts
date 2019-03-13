@@ -1,4 +1,5 @@
 import WebSocket from 'ws';
+import { map } from 'rxjs/operators';
 
 import { Arena } from './Arena';
 import { Snake } from './Snake';
@@ -31,5 +32,8 @@ const broadcastToEveryone = ((data: string): void => {
 const arenaStream = arena.toStream();
 
 arenaStream
-  .map((value: object) => JSON.stringify(value))
+  .pipe(
+    map((value: IBroadcastedData) => JSON.stringify(value))
+  )
   .subscribe(broadcastToEveryone);
+  

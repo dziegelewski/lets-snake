@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const levelsArray = [
+exports.levelsArray = [
     //  [
     // 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
     // 'x                            x',
@@ -133,14 +133,14 @@ const levelsArray = [
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         ]],
 ];
-const levelsSequence = (function* (levels) {
+exports.levelsSequence = (function* (levels) {
     for (let lap = 0; lap < Infinity; lap++) {
         for (let i = 0; i < levels.length; i++) {
-            yield hardness(levels[i], lap);
+            yield difficulty(levels[i], lap);
         }
     }
-})(levelsArray);
-const hardness = (level, lap) => {
+})(exports.levelsArray);
+const difficulty = (level, lap) => {
     const [layout, { food = 20, tempo = 150, grow = 1 } = {}] = level;
     return [
         layout,
@@ -150,9 +150,5 @@ const hardness = (level, lap) => {
             grow,
         }
     ];
-};
-module.exports = {
-    levelsArray,
-    levelsSequence,
 };
 //# sourceMappingURL=levels.js.map

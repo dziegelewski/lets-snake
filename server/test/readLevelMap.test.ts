@@ -1,4 +1,5 @@
-const readLevelMap = require('../dist/readLevelMap').default;
+import { expect } from 'chai';
+import { readLevelMap } from '../src/readLevelMap';
 
 const levelMap = [
 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',

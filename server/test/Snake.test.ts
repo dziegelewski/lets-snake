@@ -1,6 +1,7 @@
- const { Snake } = require('../dist/Snake');
+import { expect } from 'chai'; 
+import { Snake } from '../src/Snake';
  
- describe('Snake', () => {
+describe('Snake', () => {
    describe('static findLongest', () => {
  
      const snakeLen1 = new Snake(1);
@@ -17,7 +18,7 @@
  
      it('returns this snake if there is only one', () => {
        expect(Snake.findLongest(
-         { snakeLen1 }
+         { 1: snakeLen1 }
        ))
        .to.be.ofSize(1).and
        .to.be.containingAllOf([ snakeLen1 ]);
@@ -26,7 +27,7 @@
       it('returns two snakes, if there are one shorter and two with equal length', () => {
        const anotherSnakeLen2 = new Snake(2);
          expect(Snake.findLongest(
-          { snakeLen1, snakeLen2, anotherSnakeLen2 }
+          { 1: snakeLen1, 2: snakeLen2, 3: anotherSnakeLen2 }
         ))
        .to.be.ofSize(2).and
        .to.be.containingAllOf([ snakeLen2, anotherSnakeLen2 ]);
@@ -34,7 +35,7 @@
    
      it('returns longest snake from group of 5 snakes', () => {
        expect(Snake.findLongest(
-          { snakeLen1, snakeLen2, snakeLen3, snakeLen3, snakeLen4, snakeLen5 }
+          { 1: snakeLen1, 2: snakeLen2, 3: snakeLen3, 4: snakeLen4, 5: snakeLen5 }
         ))
        .to.be.ofSize(1).and
        .to.be.containingAllOf([ snakeLen5 ]);

@@ -7,8 +7,8 @@ import { EventEmitter } from 'events';
 import { sample, without } from 'lodash';
 import wait from 'delay';
 
-import StartingPoint from './StartingPoint';
-import readLevelMap from './readLevelMap';
+import { StartingPoint } from './StartingPoint';
+import { readLevelMap } from './readLevelMap';
 const findLongestSnake = Snake.findLongest;
 
 export class Arena extends EventEmitter {

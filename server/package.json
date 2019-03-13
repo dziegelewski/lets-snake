@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ./test/test-setup.js --watch",
+    "test": "mocha -r ts-node/register --require ./test/test-setup.ts test/**/**.test.ts",
+    "test:watch": "mocha -r ts-node/register --require ./test/test-setup.ts test/**/**.test.ts --watch",
     "compile": "node node_modules/typescript/bin/tsc",
     "compile:watch": "node node_modules/typescript/bin/tsc -w",
     "start": "npm run compile && node dist/index",
@@ -26,13 +27,17 @@
     "ws": "^6.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/chai-arrays": "^1.0.2",
     "@types/lodash": "^4.14.117",
+    "@types/mocha": "^5.2.6",
     "@types/rx": "^4.1.1",
     "@types/ws": "^6.0.1",
     "chai": "^4.2.0",
     "chai-arrays": "^2.0.0",
     "concurrently": "^4.0.1",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.6"
+    "nodemon": "^1.18.6",
+    "ts-node": "^8.0.3"
   }
 }

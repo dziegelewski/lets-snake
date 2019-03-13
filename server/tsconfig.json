@@ -24,7 +24,10 @@
     "types": [
       "node",
       "ws",
-      "rx"
+      "rx",
+      "chai",
+      "chai-arrays",
+      "mocha"
     ]
   },
   "include": [

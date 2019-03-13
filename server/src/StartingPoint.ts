@@ -1,6 +1,6 @@
 import { point, direction } from './types';
 
-class StartingPoint {
+export class StartingPoint {
   field: point;
   direction: direction;
 
@@ -29,4 +29,3 @@ class StartingPoint {
   }
 }
 
-export default StartingPoint;

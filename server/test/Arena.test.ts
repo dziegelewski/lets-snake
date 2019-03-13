@@ -1,4 +1,5 @@
-const { Arena } = require('../dist/Arena');
+import { expect } from 'chai';
+import { Arena } from '../src/Arena';
 
 describe('Arena', () => {
   describe('stream', () => {

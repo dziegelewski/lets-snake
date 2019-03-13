@@ -17,6 +17,7 @@ function readLevelMap(levelMap) {
         startingPoints,
     };
 }
+exports.readLevelMap = readLevelMap;
 function readSize(levelMap) {
     const width = levelMap.reduce((longestRowLength, row) => Math.max(row.length, longestRowLength), 0);
     const height = levelMap.length;
@@ -49,5 +50,4 @@ function startingPointsFromPoints(points) {
     })
         .map(StartingPoint_1.default.fromArray);
 }
-exports.default = readLevelMap;
 //# sourceMappingURL=readLevelMap.js.map

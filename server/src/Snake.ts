@@ -1,6 +1,6 @@
 import { point, direction, ISnakesCollection } from './types';
 import { Arena } from './Arena';
-import StartingPoint from './StartingPoint';
+import { StartingPoint } from './StartingPoint';
 
 import { sample, reduce } from 'lodash';
 

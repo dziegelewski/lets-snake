@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = __importDefault(require("ws"));
+const operators_1 = require("rxjs/operators");
 const Arena_1 = require("./Arena");
 const Snake_1 = require("./Snake");
 const { levelsSequence } = require('./levels');
@@ -23,6 +24,6 @@ const broadcastToEveryone = ((data) => {
 });
 const arenaStream = arena.toStream();
 arenaStream
-    .map((value) => JSON.stringify(value))
+    .pipe(operators_1.map((value) => JSON.stringify(value)))
     .subscribe(broadcastToEveryone);
 //# sourceMappingURL=index.js.map

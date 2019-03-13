@@ -1,6 +1,6 @@
 import { LevelMap, ILevelConfig, level } from './types';
 
-const levelsArray: level[] = [
+export const levelsArray: level[] = [
 //  [
 // 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 // 'x                            x',
@@ -143,15 +143,15 @@ const levelsArray: level[] = [
 ]],
 ];
 
-const levelsSequence = (function*(levels) {
+export const levelsSequence = (function*(levels) {
   for (let lap = 0; lap < Infinity; lap++) {
     for (let i = 0; i < levels.length; i++) {
-      yield hardness(levels[i], lap);
+      yield difficulty(levels[i], lap);
     }
   }
-})(levelsArray)
+})(levelsArray);
 
-const hardness = (level: level, lap: number): level => {
+const difficulty = (level: level, lap: number): level => {
   const [layout, { food = 20, tempo = 150, grow = 1 } = {}] = level;
 
   return [
@@ -162,9 +162,5 @@ const hardness = (level: level, lap: number): level => {
       grow,
     }
   ]
-}
+};
 
-module.exports = {
-  levelsArray,
-  levelsSequence,
-}

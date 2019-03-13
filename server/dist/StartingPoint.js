@@ -23,5 +23,5 @@ class StartingPoint {
         }
     }
 }
-exports.default = StartingPoint;
+exports.StartingPoint = StartingPoint;
 //# sourceMappingURL=StartingPoint.js.map

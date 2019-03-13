@@ -1,8 +1,7 @@
 import { point, LevelMap, IReadMap, IPointsMap } from "./types";
-import StartingPoint from './StartingPoint';
+import { StartingPoint } from './StartingPoint';
 
-function readLevelMap(levelMap: LevelMap): IReadMap {
-
+export function readLevelMap(levelMap: LevelMap): IReadMap {
   const size = readSize(levelMap);
   const points = readPoints(levelMap);
 
@@ -64,5 +63,3 @@ function startingPointsFromPoints(points: IPointsMap): StartingPoint[] {
   })
     .map(StartingPoint.fromArray)
 }
-
-export default readLevelMap;
