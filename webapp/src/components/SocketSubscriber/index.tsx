@@ -3,6 +3,8 @@ import isEmpty from 'lodash/isEmpty';
 import Message from 'components/Message';
 
 import { ISocketData } from 'types';
+import { LoadingDots } from 'components/LoadingDots';
+
 
 interface IMessage {
   data: string;
@@ -110,7 +112,7 @@ class SocketSubscriber extends Component<Props, State> {
     if (this.isLoading) {
       return (
         <Message>
-          Waitng for your connection...
+          Waiting for your connection <LoadingDots />
         </Message>
       )
     }
