@@ -1,12 +1,12 @@
 import { Snake } from './Snake';
 
-export type point = [number, number];
+export type Point = [number, number];
 
-export type direction = 'left' | 'right' | 'up' | 'down';
+export type Direction = 'left' | 'right' | 'up' | 'down';
 
 export interface IStartingPoint {
-  field: point;
-  direction: direction;
+  field: Point;
+  direction: Direction;
 }
 
 export interface ISnakesCollection {
@@ -14,14 +14,14 @@ export interface ISnakesCollection {
 }
 
 export interface IReadMap {
-    size: point;
-    obstacles: point[];
-    foodSpots: point[];
+    size: Point;
+    obstacles: Point[];
+    foodSpots: Point[];
     startingPoints: IStartingPoint[];
 }
 
 export interface IPointsMap {
-  [letter: string]: point[];
+  [letter: string]: Point[];
 }
 
 export type LevelMap = string[];
@@ -32,7 +32,7 @@ export interface ILevelConfig {
   grow?: number;
 }
 
-export type level = [LevelMap, ILevelConfig?];
+export type Level = [LevelMap, ILevelConfig?];
 
 export interface IBroadcastedData {
   value: string;

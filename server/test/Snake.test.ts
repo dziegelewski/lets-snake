@@ -27,15 +27,15 @@ describe('Snake', () => {
       it('returns two snakes, if there are one shorter and two with equal length', () => {
        const anotherSnakeLen2 = new Snake(2);
          expect(Snake.findLongest(
-          { 1: snakeLen1, 2: snakeLen2, 3: anotherSnakeLen2 }
+          Object.values([snakeLen1, snakeLen2, anotherSnakeLen2])
         ))
        .to.be.ofSize(2).and
        .to.be.containingAllOf([ snakeLen2, anotherSnakeLen2 ]);
       });
    
      it('returns longest snake from group of 5 snakes', () => {
-       expect(Snake.findLongest(
-          { 1: snakeLen1, 2: snakeLen2, 3: snakeLen3, 4: snakeLen4, 5: snakeLen5 }
+        expect(Snake.findLongest(
+          Object.values([snakeLen1, snakeLen2, snakeLen3, snakeLen4, snakeLen5])
         ))
        .to.be.ofSize(1).and
        .to.be.containingAllOf([ snakeLen5 ]);

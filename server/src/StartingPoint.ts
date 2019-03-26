@@ -1,19 +1,19 @@
-import { point, direction } from './types';
+import { Point, Direction } from './types';
 
 export class StartingPoint {
-  field: point;
-  direction: direction;
+  field: Point;
+  direction: Direction;
 
-  constructor(field: point, directionAbbrev: string) {
+  constructor(field: Point, directionAbbrev: string) {
     this.field = field;
     this.direction = StartingPoint.directionMap(directionAbbrev);
   }
 
-  static fromArray([ field, directionAbbrev]: [point, string]) {
+  static fromArray([ field, directionAbbrev]: [Point, string]) {
     return new StartingPoint(field, directionAbbrev)
   }
 
-  static directionMap(directionAbbrev: string): direction {
+  static directionMap(directionAbbrev: string): Direction {
     switch(directionAbbrev) {
       case 'L':
       return 'left';

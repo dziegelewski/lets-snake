@@ -1,6 +1,6 @@
-import { LevelMap, ILevelConfig, level } from './types';
+import { LevelMap, ILevelConfig, Level } from './types';
 
-export const levelsArray: level[] = [
+export const levelsArray: Level[] = [
 //  [
 // 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 // 'x                            x',
@@ -151,7 +151,7 @@ export const levelsSequence = (function*(levels) {
   }
 })(levelsArray);
 
-const difficulty = (level: level, lap: number): level => {
+const difficulty = (level: Level, lap: number): Level => {
   const [layout, { food = 20, tempo = 150, grow = 1 } = {}] = level;
 
   return [

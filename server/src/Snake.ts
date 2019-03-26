@@ -1,8 +1,8 @@
-import { point, direction, ISnakesCollection } from './types';
+import { sample, reduce } from 'lodash';
+
+import { Point, Direction, ISnakesCollection } from './types';
 import { Arena } from './Arena';
 import { StartingPoint } from './StartingPoint';
-
-import { sample, reduce } from 'lodash';
 
 const foodOnBorn = 2;
 let snakeIds = 0;
@@ -11,10 +11,10 @@ export class Snake {
   id: number;
   food: number = 0;
   trophies: number = 0;
-  fields: point[]; 
+  fields: Point[]; 
   name: string;
-  direction: direction;
-  lastDirection: direction;
+  direction: Direction;
+  lastDirection: Direction;
   arena: Arena;
   [value: string]: any;
 
@@ -40,7 +40,7 @@ export class Snake {
     return this;
   }
 
-  turn(newDirection: direction): void {
+  turn(newDirection: Direction): void {
     const { lastDirection } = this;
 
     if (Snake.directionIsIn90degsToDirection(newDirection, lastDirection)) {
@@ -53,7 +53,7 @@ export class Snake {
 
     if (!direction) return;
 
-    const newHeadPosition = (this.fields[0].slice() as point);
+    const newHeadPosition = (this.fields[0].slice() as Point);
 
     switch(direction) {
       case "left":
@@ -105,7 +105,7 @@ export class Snake {
 
   die(): void {}
 
-  get head(): point {
+  get head(): Point {
     if (this.fields && this.fields.length) {
       return this.fields[0];
     } else {
@@ -117,13 +117,13 @@ export class Snake {
     return this.fields.length + this.food;
   }
 
-  static readDirection(arrowKey: string): direction {
-    return <direction>arrowKey
+  static readDirection(arrowKey: string): Direction {
+    return <Direction>arrowKey
       .replace('Arrow', '')
       .toLowerCase();
   }
 
-  static directionIsIn90degsToDirection(dir1: direction, dir2: direction): boolean {
+  static directionIsIn90degsToDirection(dir1: Direction, dir2: Direction): boolean {
     switch(dir1) {
       case 'up':
       case 'down':

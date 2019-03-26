@@ -1,11 +1,10 @@
-import Timeout = NodeJS.Timeout;
-import { point, ISnakesCollection, level } from './types';
+import wait from 'delay';
 
+import { Point, ISnakesCollection, Level } from './types';
 import * as Rx from 'rxjs/Rx';
 import { Snake } from './Snake';
 import { EventEmitter } from 'events';
 import { sample, without } from 'lodash';
-import wait from 'delay';
 
 import { StartingPoint } from './StartingPoint';
 import { readLevelMap } from './readLevelMap';
@@ -15,12 +14,12 @@ export class Arena extends EventEmitter {
   foodLeft: number;
   tempo: number;
   grow: number;
-  snakesMovingInterval: Timeout;
+  snakesMovingInterval: NodeJS.Timeout;
 
-  size: point = [0, 0];
-  obstacles: point[];
-  foodSpots: point[];
-  food: point[] = [];
+  size: Point = [0, 0];
+  obstacles: Point[];
+  foodSpots: Point[];
+  food: Point[] = [];
 
   snakes: ISnakesCollection = {};
   startingPoints: StartingPoint[] = [];
@@ -125,7 +124,7 @@ export class Arena extends EventEmitter {
     }
   }
 
-  removeFood(point: point): void {
+  removeFood(point: Point): void {
     this.food = this.food.filter((foodPoint) => {
       return !Arena.comparePoints(foodPoint, point);
     });
@@ -143,7 +142,7 @@ export class Arena extends EventEmitter {
     return this.getSnakes().length > 0; 
   }
 
-  get snakesFields(): point[] {
+  get snakesFields(): Point[] {
     return this.eachSnake((snake) => {
       return snake.fields || []
     }).flat() || [];
@@ -153,8 +152,8 @@ export class Arena extends EventEmitter {
     return this.eachSnake((snake) => snake.provideDetails());
   }
 
-  checkField(field: point, snake: Snake): string {
-    const isOnField = (comparedPoint: point): boolean => Arena.comparePoints(comparedPoint, field);
+  checkField(field: Point, snake: Snake): string {
+    const isOnField = (comparedPoint: Point): boolean => Arena.comparePoints(comparedPoint, field);
 
     if (this.food.some(isOnField)) {
       return 'food';
@@ -226,7 +225,7 @@ export class Arena extends EventEmitter {
     })
   }
 
-  static comparePoints(point1: point, point2: point): boolean {
+  static comparePoints(point1: Point, point2: Point): boolean {
     return point1.toString() === point2.toString();
   }
 
@@ -244,7 +243,7 @@ export class Arena extends EventEmitter {
         food: levelFood = 15,
         grow: levelGrow = 1,
       } = {}
-    ]: level): this {
+    ]: Level): this {
 
     this.gameIsOn = false;
 

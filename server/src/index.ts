@@ -3,8 +3,8 @@ import { map } from 'rxjs/operators';
 
 import { Arena } from './Arena';
 import { Snake } from './Snake';
-import { direction, IBroadcastedData } from './types';
-const { levelsSequence } = require('./levels');
+import { Direction, IBroadcastedData } from './types';
+import { levelsSequence } from './levels';
 
 const PORT = parseInt(process.env.PORT) || 9000;
 
@@ -18,14 +18,14 @@ const socketServer = new WebSocket.Server(
 socketServer.on('connection', (socket) => {
   const snake = new Snake().joinArena(arena);
 
-  socket.on('message', (message: direction) => {
-    snake.turn(message);
+  socket.on('message', (directionMessage: Direction) => {
+    snake.turn(directionMessage);
   }); 
 });
 
 const broadcastToEveryone = ((data: string): void => {
-   socketServer.clients.forEach((client) => {
-    client.send(data);
+  socketServer.clients.forEach((client) => {
+      client.send(data);
   });
 });
 
